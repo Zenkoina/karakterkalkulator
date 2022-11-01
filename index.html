@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karakter Kalkulator</title>
+    <link rel="stylesheet" href="./index.css">
+</head>
+<body>
+    <main>
+        <form id="calculatorForm">
+            <label>Bokstavkarater</label>
+            <label>Antall studiepoeng</label>
+            <div class="gradeInputs">
+                <input type="text" maxlength="1" pattern="[A-Fa-f]{1}" title="Bokstav fra A til F" class="gradeInput">
+                <input type="number" min="0" class="pointInput">
+            </div>
+            <p>Sum studiepoeng: </p>
+            <p>Sum tallverdi x studiepoeng: </p>
+            <p>Karaktersnitt: </p>
+            <p>Karakterpoeng: </p>
+        </form>
+    </main>
+    <script type="text/javascript" src="./index.js"></script>
+</body>
+</html>
