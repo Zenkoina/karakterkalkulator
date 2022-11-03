@@ -1,5 +1,6 @@
 /*
-todo: slett tomme rader automatisk
+todo: 
+sletting av rader logiken er ikke ferdig lagt
 */
 
 /*
@@ -80,6 +81,34 @@ function addGradeInput(section) {
     section.insertAdjacentElement('afterend', clone)
 }
 
+function removeEmptyGradeInput() {
+    for (let index = 0; index < document.getElementsByClassName('gradeInputsRow').length; index++) {
+        const section = document.getElementsByClassName('gradeInputsRow')[index];
+        
+        if (section.getElementsByTagName('INPUT').length !== 0) {
+            const gradeInput = section.getElementsByClassName('gradeInput')[0]
+            const pointInput = section.getElementsByClassName('pointInput')[0]
+
+            if (gradeInput.value === '' && pointInput.value === '') {
+                const lastSection = document.getElementsByClassName('gradeInputsRow')[document.getElementsByClassName('gradeInputsRow').length - 1]
+                if (lastSection !== section) {
+                    console.log(section)
+                    if (document.activeElement.parentElement !== section) {
+                        section.remove()
+                    } else {
+                        const secondLastSection = document.getElementsByClassName('gradeInputsRow')[document.getElementsByClassName('gradeInputsRow').length - 2]
+                        const secondLastSectiongradeInput = secondLastSection.getElementsByClassName('gradeInput')[0]
+                        const secondLastSectionpointInput = secondLastSection.getElementsByClassName('pointInput')[0]
+                        if (secondLastSectiongradeInput.value === '' && secondLastSectionpointInput.innerHTML === '') {
+                            lastSection.remove()
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 function handleGradeInput(element) {
     element.addEventListener('input', () => {
         const pointInput = element.parentElement.getElementsByClassName('pointInput')[0]
@@ -97,6 +126,7 @@ function handleGradeInput(element) {
         }
         showCalculationsGradeInputs(element.parentElement)
         showCalculationsGradePoints()
+        removeEmptyGradeInput()
     })
 
     element.addEventListener('blur', () => {
@@ -117,6 +147,7 @@ function handlePointInput(element) {
         }
         showCalculationsGradeInputs(element.parentElement)
         showCalculationsGradePoints()
+        removeEmptyGradeInput()
     })
 
     element.addEventListener('blur', () => {
