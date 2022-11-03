@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="no">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Karakter Kalkulator</title>
-    <link href="https://www.hvl.no/bundles/intranettcss" rel="stylesheet"/>
-    <style>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Karakter Kalkulator</title>
+	<link href="https://www.hvl.no/bundles/intranettcss" rel="stylesheet"/>
+	<style>
 		:root {
 		  --columnWidth: clamp(2rem,100%,8rem);
 		  --padding: 1.2rem;
@@ -65,25 +65,25 @@
 	</style>
 </head>
 <body>
-    <main>
-        <form id="calculatorForm">
-        	<section class="gradeInputsRow">
+	<main>
+		<form id="calculatorForm">
+			<section class="gradeInputsRow">
 				<p>Karakter</p>
 				<p>Studiepoeng</p>
 				<p>Delsum</p>
 			</section>
-        	<section class="gradeInputsRow">
+			<section class="gradeInputsRow">
 				<input type="text" maxlength="1" pattern="[A-Fa-f]{1}" title="Bokstav fra A til F" class="gradeInput" placeholder="A til F">
 				<input type="number" min="0" class="pointInput" title="Nummer" placeholder="Nummer">
 				<p class="summaryColumn pointValue"></p>
 			</section>
-        	
-            <p id="sumPoints">Sum studiepoeng: </p>
-            <p id="sumNumxPoints">Sum tallverdi x studiepoeng: </p>
-            <p id="gradeAvg">Karaktersnitt: </p>
-            <p id="gradePoints">Karakterpoeng: </p>
-        </form>
-    </main>
-    <script type="text/javascript" src="./index.js"></script>
+
+			<p id="sumPoints">Sum studiepoeng: </p>
+			<p id="sumNumxPoints">Sum tallverdi x studiepoeng: </p>
+			<p id="gradeAvg">Karaktersnitt: </p>
+			<p id="gradePoints">Karakterpoeng: </p>
+		</form>
+	</main>
+	<script type="text/javascript" src="./index.js"></script>
 </body>
 </html>
