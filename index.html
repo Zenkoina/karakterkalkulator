@@ -4,21 +4,84 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Karakter Kalkulator</title>
-    <link rel="stylesheet" href="./index.css">
+    <link href="https://www.hvl.no/bundles/intranettcss" rel="stylesheet"/>
+    <style>
+		:root {
+		  --columnWidth: clamp(2rem,100%,8rem);
+		  --padding: 1.2rem;
+		  --radius: .8rem;
+		  --shadow: .2rem .2rem .5rem rgba(0,0,0,.2);
+		  --border: solid 2px lightgrey;
+		  --ambientNeutral: #f6f8f9;
+		  --lightNeutral: #cbd5d9;
+		  --darkNeutral: grey;
+		}
+
+		body {
+			/* body skal IKKE med i endelig versjon */
+			font-family: Arial, Helvetica, sans-serif;
+			margin: 2rem auto;
+			width: 40rem;
+		}
+
+		#calculatorForm {
+			overflow-x:auto;
+		}
+
+		#calculatorForm .gradeInputsRow {
+			display: grid;
+			grid-template-columns: clamp(2rem,30%,8rem) clamp(2rem,30%,8rem) clamp(2rem,30%,8rem);
+			grid-column-gap: .4rem;
+			align-items: center;
+		}
+		#calculatorForm .gradeInputsRow:first-child {
+			font-weight: bold;
+		}
+		#calculatorForm .gradeInputsRow:first-child p:after {
+			content: ":";
+		}
+		#calculatorForm .gradeInputsRow .pointValue {
+			max-width: 6rem;
+			overflow: hidden;
+			color: var(--darkNeutral);
+			padding: .2rem .4rem;
+			border-radius: var(--radius);
+			background: var(--ambientNeutral);
+			text-align: center;
+		}
+		#calculatorForm .gradeInputsRow .pointValue:before {
+			content: "= ";
+		}
+		
+		#calculatorForm .summaryColumn p .numberValue, .gradeInputs p .pointValue {
+			color: white;
+			padding: .2rem .4rem;
+			border-radius: var(--radius);
+			background: var(--darkNeutral);
+		}
+		#calculatorForm .summaryColumn .pointValue:before {
+			content: "= ";
+		}
+	</style>
 </head>
 <body>
     <main>
         <form id="calculatorForm">
-            <label>Bokstavkarater</label>
-            <label>Antall studiepoeng</label>
-            <div class="gradeInputs">
-                <input type="text" maxlength="1" pattern="[A-Fa-f]{1}" title="Bokstav fra A til F" class="gradeInput">
-                <input type="number" min="0" class="pointInput">
-            </div>
-            <p>Sum studiepoeng: </p>
-            <p>Sum tallverdi x studiepoeng: </p>
-            <p>Karaktersnitt: </p>
-            <p>Karakterpoeng: </p>
+        	<section class="gradeInputsRow">
+				<p>Karakter</p>
+				<p>Studiepoeng</p>
+				<p>Delsum</p>
+			</section>
+        	<section class="gradeInputsRow">
+				<input type="text" maxlength="1" pattern="[A-Fa-f]{1}" title="Bokstav fra A til F" class="gradeInput" placeholder="A til F">
+				<input type="number" min="0" class="pointInput" title="Nummer" placeholder="Nummer">
+				<p class="summaryColumn pointValue"></p>
+			</section>
+        	
+            <p id="sumPoints">Sum studiepoeng: </p>
+            <p id="sumNumxPoints">Sum tallverdi x studiepoeng: </p>
+            <p id="gradeAvg">Karaktersnitt: </p>
+            <p id="gradePoints">Karakterpoeng: </p>
         </form>
     </main>
     <script type="text/javascript" src="./index.js"></script>

@@ -1,51 +1,63 @@
-function showCalculationsGradeInputs(div) {
-    let gradeInput = div.getElementsByClassName('gradeInput')[0]
-    let pointInput = div.getElementsByClassName('pointInput')[0]
-    let numberValue = div.getElementsByClassName('numberValue').length !== 0 ? div.getElementsByClassName('numberValue')[0] : undefined
-    let pointValue = div.getElementsByClassName('pointValue').length !== 0 ? div.getElementsByClassName('pointValue')[0] : undefined
+/*
+todo: slett tomme rader automatisk
+*/
 
-    if (gradeInput.checkValidity() && pointInput.checkValidity()) {
-        if (gradeInput.value !== '') {
-            if (!numberValue) {
-                let p = document.createElement('P')
-                p.setAttribute('class', 'numberValue')
-                p.innerHTML = (gradeInput.value.toUpperCase().charCodeAt(0) / -1) + 70
-                div.appendChild(p)
-                numberValue = p
-            } else {
-                numberValue.innerHTML = (gradeInput.value.toUpperCase().charCodeAt(0) / -1) + 70
-            }
-        } else {
-            if (numberValue) {
-                numberValue.remove()
-                numberValue = undefined
-            }
-        }
-    
-        if (pointInput.value !== '' && numberValue) {
-            if (!pointValue) {
-                let p = document.createElement('P')
-                p.setAttribute('class', 'pointValue')
-                p.innerHTML = pointInput.value * numberValue.innerHTML
-                div.appendChild(p)
-            } else {
-                pointValue.innerHTML = pointInput.value * numberValue.innerHTML
-            }
-        } else {
-            if (pointValue) {
-                pointValue.remove()
-                pointValue = undefined
-            }
-        }
+/*
+questions/considerations:
+create html in js instead of index.html?
+use 0-5 in bokstavkarakter input og konverter til bokstavkarakter (0-5 = F-A)
+use enter in inputs to move to next input as an alternative to tab
+*/ 
+
+function showCalculationsGradeInputs(section) {
+    const gradeInput = section.getElementsByClassName('gradeInput')[0]
+    const pointInput = section.getElementsByClassName('pointInput')[0]
+    const pointValue = section.getElementsByClassName('pointValue')[0]
+
+    if (gradeInput.checkValidity() && pointInput.checkValidity() && gradeInput.value !== '' && pointInput.value !== '') {
+        pointValue.innerHTML = pointInput.value * ((gradeInput.value.toUpperCase().charCodeAt(0) / -1) + 70)
+    } else {
+        pointValue.innerHTML = ''
     }
 }
 
 function showCalculationsGradePoints() {
-    
+    const sumPoints = document.getElementById('sumPoints')
+    const sumNumxPoints = document.getElementById('sumNumxPoints')
+    const gradeAvg = document.getElementById('gradeAvg')
+    const gradePoints = document.getElementById('gradePoints')
+    let sumPointsValue = 0
+    let sumNumxPointsValue = 0
+
+    for (let index = 0; index < document.getElementsByClassName('gradeInputsRow').length; index++) {
+        const section = document.getElementsByClassName('gradeInputsRow')[index];
+        
+        if (section.getElementsByTagName('INPUT').length !== 0) {
+            const pointInput = section.getElementsByClassName('pointInput')[0]
+            const pointValue = section.getElementsByClassName('pointValue')[0]
+
+            if (pointInput.value !== '' || pointValue.innerHTML !== '') {
+                sumPointsValue += parseInt(pointInput.value)
+                sumNumxPointsValue += parseInt(pointValue.innerHTML)
+                sumPoints.innerHTML = `Sum studiepoeng: ${sumPointsValue}`
+                sumNumxPoints.innerHTML = `Sum tallverdi x studiepoeng: ${sumNumxPointsValue}`
+            }
+        }
+    }
+
+    if (sumPointsValue !== 0 || sumNumxPointsValue !== 0) {
+        gradeAvg.innerHTML = `Karaktersnitt: ${parseFloat((sumNumxPointsValue / sumPointsValue).toFixed(3))}`
+        gradePoints.innerHTML = `Karakterpoeng: ${parseFloat((sumNumxPointsValue / sumPointsValue * 10).toFixed(2))}`
+    } else {
+        sumPoints.innerHTML = 'Sum studiepoeng: '
+        sumNumxPoints.innerHTML = 'Sum tallverdi x studiepoeng: '
+        gradeAvg.innerHTML = 'Karaktersnitt: '
+        gradePoints.innerHTML = 'Karakterpoeng: '
+    }
 }
 
-function addGradeInput(div) {
-    clone = div.cloneNode(true)
+function addGradeInput(section) {
+    clone = section.cloneNode(true)
 
     for (let index = 0; index < clone.getElementsByTagName('INPUT').length; index++) {
         const element = clone.getElementsByTagName('INPUT')[index];
@@ -62,30 +74,29 @@ function addGradeInput(div) {
 
     for (let index = 0; index < clone.getElementsByTagName('P').length; index++) {
         const element = clone.getElementsByTagName('P')[index];
-        element.remove()
+        element.innerHTML = ''
     }
 
-    div.insertAdjacentElement('afterend', clone)
+    section.insertAdjacentElement('afterend', clone)
 }
 
 function handleGradeInput(element) {
     element.addEventListener('input', () => {
-        element.value.toUpperCase()
+        const pointInput = element.parentElement.getElementsByClassName('pointInput')[0]
+        
+        element.value = element.value.toUpperCase()
 
         if (element.checkValidity() && element.value !== '') {
-            let nextInput = element.nextSibling
-            while(nextInput && nextInput.tagName !== 'INPUT') {
-                nextInput = nextInput.nextSibling
-            }
-            nextInput.focus()
+            pointInput.focus()
 
-            if (element.parentElement.getElementsByClassName('pointInput')[0].value !== '') {
+            if (pointInput.value !== '') {
                 if (document.getElementsByClassName('gradeInput')[document.getElementsByClassName('gradeInput').length - 1] === element) {
                     addGradeInput(element.parentElement)
                 }
             }
         }
         showCalculationsGradeInputs(element.parentElement)
+        showCalculationsGradePoints()
     })
 
     element.addEventListener('blur', () => {
@@ -95,14 +106,17 @@ function handleGradeInput(element) {
 
 function handlePointInput(element) {
     element.addEventListener('input', () => {
+        const gradeInput = element.parentElement.getElementsByClassName('gradeInput')[0]
+
         if (element.checkValidity() && element.value !== '') {
-            if (element.parentElement.getElementsByClassName('gradeInput')[0].value !== '') {
+            if (gradeInput.value !== '') {
                 if (document.getElementsByClassName('pointInput')[document.getElementsByClassName('pointInput').length - 1] === element) {
                     addGradeInput(element.parentElement)
                 }
             }
         }
         showCalculationsGradeInputs(element.parentElement)
+        showCalculationsGradePoints()
     })
 
     element.addEventListener('blur', () => {
