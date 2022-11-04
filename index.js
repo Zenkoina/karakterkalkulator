@@ -1,3 +1,7 @@
+/**
+ * Adds a clone of row below row
+ * @param {object} row htmldomobject
+ */
 function addGradeInput(row) {
     clone = row.cloneNode(true)
 
@@ -24,6 +28,10 @@ function addGradeInput(row) {
     row.insertAdjacentElement('afterend', clone)
 }
 
+/**
+ * calculates individual row and shows results
+ * @param {object} row htmldomobject
+ */
 function showCalculationsGradeInputs(row) {
     const gradeInput = row.getElementsByClassName('gradeInput')[0]
     const pointInput = row.getElementsByClassName('pointInput')[0]
@@ -36,6 +44,9 @@ function showCalculationsGradeInputs(row) {
     }
 }
 
+/**
+ * calculates all rows and shows results
+ */
 function showCalculationsGradePoints() {
     const sumPoints = document.getElementById('sumPoints')
     const sumNumxPoints = document.getElementById('sumNumxPoints')
@@ -71,6 +82,9 @@ function showCalculationsGradePoints() {
     }
 }
 
+/**
+ * removes excess inputs
+ */
 function removeEmptyGradeInput() {
     const activeElementClass = document.activeElement.classList.contains('gradeInput') ? 'gradeInput' : document.activeElement.classList.contains('pointInput') ? 'pointInput' : undefined
 
@@ -96,12 +110,21 @@ function removeEmptyGradeInput() {
     }
 }
 
-function reportInputValidity(element) {
+/**
+ * report the validity of the element on blur
+ * @param {object} element htmldomobject
+ */
+function reportValidityBlur(element) {
     element.addEventListener('blur', () => {
         element.reportValidity()
     })
 }
 
+/**
+ * If enter is pressed then focus next input in form
+ * If shift + enter is pressed then focus previous input in form
+ * @param {object} element htmldomobject
+ */
 function enterToNextInput(element) {
     element.addEventListener('keypress', (event) => {
         if (event.keyCode === 13) {
@@ -115,6 +138,10 @@ function enterToNextInput(element) {
     })
 }
 
+/**
+ * Handles all the events for elements with the gradeInput class 
+ * @param {object} element htmldomobject
+ */
 function handleGradeInput(element) {
     element.addEventListener('input', () => {
         const pointInput = element.parentElement.parentElement.getElementsByClassName('pointInput')[0]
@@ -139,10 +166,14 @@ function handleGradeInput(element) {
         removeEmptyGradeInput()
     })
 
-    reportInputValidity(element)
+    reportValidityBlur(element)
     enterToNextInput(element)
 }
 
+/**
+ * Handles all the events for elements with the pointInput class 
+ * @param {object} element htmldomobject
+ */
 function handlePointInput(element) {
     element.addEventListener('input', () => {
         const gradeInput = element.parentElement.parentElement.getElementsByClassName('gradeInput')[0]
@@ -160,11 +191,11 @@ function handlePointInput(element) {
         removeEmptyGradeInput()
     })
 
-    reportInputValidity(element)
+    reportValidityBlur(element)
     enterToNextInput(element)
 }
 
-//Handle already existing inputs
+//Add events to already existing inputs
 for (let index = 0; index < document.getElementsByClassName('gradeInput').length; index++) {
     const element = document.getElementsByClassName('gradeInput')[index];
     handleGradeInput(element)
