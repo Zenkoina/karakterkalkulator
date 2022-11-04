@@ -82,34 +82,6 @@ function addGradeInput(row) {
 }
 
 function removeEmptyGradeInput() {
-    /*
-    for (let index = 0; index < document.getElementsByClassName('gradeInputsRow').length; index++) {
-        const section = document.getElementsByClassName('gradeInputsRow')[index];
-        
-        if (section.getElementsByTagName('INPUT').length !== 0) {
-            const gradeInput = section.getElementsByClassName('gradeInput')[0]
-            const pointInput = section.getElementsByClassName('pointInput')[0]
-
-            if (gradeInput.value === '' && pointInput.value === '') {
-                const lastSection = document.getElementsByClassName('gradeInputsRow')[document.getElementsByClassName('gradeInputsRow').length - 1]
-                if (lastSection !== section) {
-                    console.log(section)
-                    if (document.activeElement.parentElement !== section) {
-                        section.remove()
-                    } else {
-                        const secondLastSection = document.getElementsByClassName('gradeInputsRow')[document.getElementsByClassName('gradeInputsRow').length - 2]
-                        const secondLastSectiongradeInput = secondLastSection.getElementsByClassName('gradeInput')[0]
-                        const secondLastSectionpointInput = secondLastSection.getElementsByClassName('pointInput')[0]
-                        if (secondLastSectiongradeInput.value === '' && secondLastSectionpointInput.innerHTML === '') {
-                            lastSection.remove()
-                        }
-                    }
-                }
-            }
-        }
-    }
-    */
-
     const activeElementClass = document.activeElement.classList.contains('gradeInput') ? 'gradeInput' : document.activeElement.classList.contains('pointInput') ? 'pointInput' : undefined
     for (let index = document.getElementsByClassName('gradeInputsRow').length - 2; index > 0; index--) {
         const section = document.getElementsByClassName('gradeInputsRow')[index];
@@ -119,10 +91,14 @@ function removeEmptyGradeInput() {
             const pointInput = section.getElementsByClassName('pointInput')[0]
 
             if (gradeInput.value === '' && pointInput.value === '') {
-                document.getElementsByClassName('gradeInputsRow')[document.getElementsByClassName('gradeInputsRow').length - 1].remove()
                 if (document.activeElement.parentElement.parentElement === section) {
                     document.getElementsByClassName('gradeInputsRow')[document.getElementsByClassName('gradeInputsRow').length - 1].getElementsByClassName(activeElementClass)[0].focus()
                 }
+                section.remove()
+            } else if (gradeInput.value === '' || pointInput.value === '') {
+                console.log(section)
+                document.getElementsByClassName('gradeInputsRow')[document.getElementsByClassName('gradeInputsRow').length - 1].remove()
+                return
             } else {
                 return
             }
