@@ -54,7 +54,7 @@ function showCalculationsGradePoints() {
             if (pointInput.value !== '' && pointValue.innerHTML !== '') {
                 sumPointsValue += parseInt(pointInput.value)
                 sumNumxPointsValue += parseInt(pointValue.innerHTML)
-                sumPoints.innerHTML = `Sum studiepoeng: ${sumPointsValue}`
+                sumPoints.innerHTML = sumPointsValue
                 sumNumxPoints.innerHTML = sumNumxPointsValue
             }
         }
@@ -64,7 +64,7 @@ function showCalculationsGradePoints() {
         gradeAvg.innerHTML = `Karaktersnitt: ${parseFloat((sumNumxPointsValue / sumPointsValue).toFixed(3))}`
         gradePoints.innerHTML = `Karakterpoeng: ${parseFloat((sumNumxPointsValue / sumPointsValue * 10).toFixed(2))}`
     } else {
-        sumPoints.innerHTML = 'Sum studiepoeng: '
+        sumPoints.innerHTML = ''
         sumNumxPoints.innerHTML = ''
         gradeAvg.innerHTML = 'Karaktersnitt: '
         gradePoints.innerHTML = 'Karakterpoeng: '
