@@ -65,6 +65,15 @@
 		}
 	</style>
 	-->
+	<style>
+		#gradeAvg::before {
+			content: "Karaktersnitt: ";
+		}
+
+		#gradePoints::before {
+			content: "Karakterpoeng: ";
+		}
+	</style>
 </head>
 <body>
 	<main>
@@ -95,8 +104,8 @@
 					</tr>
 				</tfoot>
 			</table>
-			<p id="gradeAvg">Karaktersnitt: </p>
-			<p id="gradePoints">Karakterpoeng: </p>
+			<p id="gradeAvg"></p>
+			<p id="gradePoints"></p>
 		</form>
 	</main>
 	<script type="text/javascript" src="./index.js"></script>

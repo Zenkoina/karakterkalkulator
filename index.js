@@ -61,13 +61,13 @@ function showCalculationsGradePoints() {
     }
 
     if (sumPointsValue !== 0 || sumNumxPointsValue !== 0) {
-        gradeAvg.innerHTML = `Karaktersnitt: ${parseFloat((sumNumxPointsValue / sumPointsValue).toFixed(3))}`
-        gradePoints.innerHTML = `Karakterpoeng: ${parseFloat((sumNumxPointsValue / sumPointsValue * 10).toFixed(2))}`
+        gradeAvg.innerHTML = parseFloat((sumNumxPointsValue / sumPointsValue).toFixed(3))
+        gradePoints.innerHTML = parseFloat((sumNumxPointsValue / sumPointsValue * 10).toFixed(2))
     } else {
         sumPoints.innerHTML = ''
         sumNumxPoints.innerHTML = ''
-        gradeAvg.innerHTML = 'Karaktersnitt: '
-        gradePoints.innerHTML = 'Karakterpoeng: '
+        gradeAvg.innerHTML = ''
+        gradePoints.innerHTML = ''
     }
 }
 
