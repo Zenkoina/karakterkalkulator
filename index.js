@@ -10,10 +10,10 @@ use 0-5 in bokstavkarakter input og konverter til bokstavkarakter (0-5 = F-A)
 use enter in inputs to move to next input as an alternative to tab
 */ 
 
-function showCalculationsGradeInputs(section) {
-    const gradeInput = section.getElementsByClassName('gradeInput')[0]
-    const pointInput = section.getElementsByClassName('pointInput')[0]
-    const pointValue = section.getElementsByClassName('pointValue')[0]
+function showCalculationsGradeInputs(row) {
+    const gradeInput = row.getElementsByClassName('gradeInput')[0]
+    const pointInput = row.getElementsByClassName('pointInput')[0]
+    const pointValue = row.getElementsByClassName('pointValue')[0]
 
     if (gradeInput.checkValidity() && pointInput.checkValidity() && gradeInput.value !== '' && pointInput.value !== '') {
         pointValue.innerHTML = pointInput.value * ((gradeInput.value.toUpperCase().charCodeAt(0) / -1) + 70)
@@ -31,11 +31,11 @@ function showCalculationsGradePoints() {
     let sumNumxPointsValue = 0
 
     for (let index = 0; index < document.getElementsByClassName('gradeInputsRow').length; index++) {
-        const section = document.getElementsByClassName('gradeInputsRow')[index];
+        const row = document.getElementsByClassName('gradeInputsRow')[index];
         
-        if (section.getElementsByTagName('INPUT').length !== 0) {
-            const pointInput = section.getElementsByClassName('pointInput')[0]
-            const pointValue = section.getElementsByClassName('pointValue')[0]
+        if (row.getElementsByTagName('INPUT').length !== 0) {
+            const pointInput = row.getElementsByClassName('pointInput')[0]
+            const pointValue = row.getElementsByClassName('pointValue')[0]
 
             if (pointInput.value !== '' || pointValue.innerHTML !== '') {
                 sumPointsValue += parseInt(pointInput.value)
@@ -57,8 +57,8 @@ function showCalculationsGradePoints() {
     }
 }
 
-function addGradeInput(section) {
-    clone = section.cloneNode(true)
+function addGradeInput(row) {
+    clone = row.cloneNode(true)
 
     for (let index = 0; index < clone.getElementsByTagName('INPUT').length; index++) {
         const element = clone.getElementsByTagName('INPUT')[index];
@@ -78,10 +78,11 @@ function addGradeInput(section) {
         element.innerHTML = ''
     }
 
-    section.insertAdjacentElement('afterend', clone)
+    row.insertAdjacentElement('afterend', clone)
 }
 
 function removeEmptyGradeInput() {
+    /*
     for (let index = 0; index < document.getElementsByClassName('gradeInputsRow').length; index++) {
         const section = document.getElementsByClassName('gradeInputsRow')[index];
         
@@ -107,11 +108,31 @@ function removeEmptyGradeInput() {
             }
         }
     }
+    */
+
+    const activeElementClass = document.activeElement.classList.contains('gradeInput') ? 'gradeInput' : document.activeElement.classList.contains('pointInput') ? 'pointInput' : undefined
+    for (let index = document.getElementsByClassName('gradeInputsRow').length - 2; index > 0; index--) {
+        const section = document.getElementsByClassName('gradeInputsRow')[index];
+        
+        if (section.getElementsByTagName('INPUT').length !== 0) {
+            const gradeInput = section.getElementsByClassName('gradeInput')[0]
+            const pointInput = section.getElementsByClassName('pointInput')[0]
+
+            if (gradeInput.value === '' && pointInput.value === '') {
+                document.getElementsByClassName('gradeInputsRow')[document.getElementsByClassName('gradeInputsRow').length - 1].remove()
+                if (document.activeElement.parentElement.parentElement === section) {
+                    document.getElementsByClassName('gradeInputsRow')[document.getElementsByClassName('gradeInputsRow').length - 1].getElementsByClassName(activeElementClass)[0].focus()
+                }
+            } else {
+                return
+            }
+        }
+    }
 }
 
 function handleGradeInput(element) {
     element.addEventListener('input', () => {
-        const pointInput = element.parentElement.getElementsByClassName('pointInput')[0]
+        const pointInput = element.parentElement.parentElement.getElementsByClassName('pointInput')[0]
         
         element.value = element.value.toUpperCase()
 
@@ -120,11 +141,11 @@ function handleGradeInput(element) {
 
             if (pointInput.value !== '') {
                 if (document.getElementsByClassName('gradeInput')[document.getElementsByClassName('gradeInput').length - 1] === element) {
-                    addGradeInput(element.parentElement)
+                    addGradeInput(element.parentElement.parentElement)
                 }
             }
         }
-        showCalculationsGradeInputs(element.parentElement)
+        showCalculationsGradeInputs(element.parentElement.parentElement)
         showCalculationsGradePoints()
         removeEmptyGradeInput()
     })
@@ -136,16 +157,16 @@ function handleGradeInput(element) {
 
 function handlePointInput(element) {
     element.addEventListener('input', () => {
-        const gradeInput = element.parentElement.getElementsByClassName('gradeInput')[0]
+        const gradeInput = element.parentElement.parentElement.getElementsByClassName('gradeInput')[0]
 
         if (element.checkValidity() && element.value !== '') {
             if (gradeInput.value !== '') {
                 if (document.getElementsByClassName('pointInput')[document.getElementsByClassName('pointInput').length - 1] === element) {
-                    addGradeInput(element.parentElement)
+                    addGradeInput(element.parentElement.parentElement)
                 }
             }
         }
-        showCalculationsGradeInputs(element.parentElement)
+        showCalculationsGradeInputs(element.parentElement.parentElement)
         showCalculationsGradePoints()
         removeEmptyGradeInput()
     })
