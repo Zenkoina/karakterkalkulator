@@ -97,7 +97,7 @@ function removeEmptyGradeInput() {
 
             if (gradeInput.value === '' && pointInput.value === '') {
                 if (document.activeElement.parentElement.parentElement === section) {
-                    document.getElementsByClassName('gradeInputsRow')[document.getElementsByClassName('gradeInputsRow').length - 1].getElementsByClassName(activeElementClass)[0].focus()
+                    document.getElementsByClassName('gradeInputsRow')[document.getElementsByClassName('gradeInputsRow').length - 1].getElementsByClassName(activeElementClass)[0].select()
                 }
                 section.remove()
             } else if (gradeInput.value === '' || pointInput.value === '') {
@@ -121,8 +121,8 @@ function reportValidityBlur(element) {
 }
 
 /**
- * If enter is pressed then focus next input in form
- * If shift + enter is pressed then focus previous input in form
+ * If enter is pressed then selects next input in form
+ * If shift + enter is pressed then selects previous input in form
  * @param {object} element htmldomobject
  */
 function enterToNextInput(element) {
@@ -132,7 +132,7 @@ function enterToNextInput(element) {
             const next = event.shiftKey ? -1 : 1
             const input = inputs[inputs.indexOf(element) + next]
             if (input) {
-                input.focus()
+                input.select()
             }
         }
     })
@@ -153,7 +153,7 @@ function handleGradeInput(element) {
 
         if (element.checkValidity() && element.value !== '') {
             element.value = element.value.toUpperCase()
-            pointInput.focus()
+            pointInput.select()
 
             if (pointInput.value !== '') {
                 if (lastGradeInput === element) {
