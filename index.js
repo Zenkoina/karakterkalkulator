@@ -37,7 +37,7 @@ function showCalculationsGradePoints() {
             const pointInput = row.getElementsByClassName('pointInput')[0]
             const pointValue = row.getElementsByClassName('pointValue')[0]
 
-            if (pointInput.value !== '' || pointValue.innerHTML !== '') {
+            if (pointInput.value !== '' && pointValue.innerHTML !== '') {
                 sumPointsValue += parseInt(pointInput.value)
                 sumNumxPointsValue += parseInt(pointValue.innerHTML)
                 sumPoints.innerHTML = `Sum studiepoeng: ${sumPointsValue}`
@@ -96,7 +96,6 @@ function removeEmptyGradeInput() {
                 }
                 section.remove()
             } else if (gradeInput.value === '' || pointInput.value === '') {
-                console.log(section)
                 document.getElementsByClassName('gradeInputsRow')[document.getElementsByClassName('gradeInputsRow').length - 1].remove()
                 return
             } else {
