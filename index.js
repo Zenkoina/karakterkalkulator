@@ -1,3 +1,33 @@
+function loadTable(data) {
+    data = JSON.parse(data)
+
+    if (data.karakterBeregning) {
+        for (let index = 0; index < data.karakterBeregning.length; index++) {
+            const value = data.karakterBeregning[index];
+            const gradeInputValue = value[0]
+            const pointInputValue = value[1]
+            const lastGradeInputsRow = document.getElementsByClassName('gradeInputsRow')[document.getElementsByClassName('gradeInputsRow').length - 1]
+    
+            const added = addGradeInput(lastGradeInputsRow)
+            added.getElementsByClassName('gradeInput')[0].value = gradeInputValue
+            added.getElementsByClassName('pointInput')[0].value = pointInputValue
+            showCalculationsGradeInputs(added)
+    
+            if (index === 0) {
+                for (let index = document.getElementsByClassName('gradeInputsRow').length - 1; index >= 0; index--) {
+                    const element = document.getElementsByClassName('gradeInputsRow')[index];
+                    
+                    if (element !== added) {
+                        element.remove()
+                    }
+                }
+            }
+        }
+
+        showCalculationsGradePoints()
+    }
+}
+
 /**
  * Adds a clone of row below row
  * @param {object} row htmldomobject
@@ -26,6 +56,8 @@ function addGradeInput(row) {
     }
 
     row.insertAdjacentElement('afterend', clone)
+
+    return clone
 }
 
 /**
@@ -80,6 +112,20 @@ function showCalculationsGradePoints() {
         gradeAvg.innerHTML = ''
         gradePoints.innerHTML = ''
     }
+
+    // Create JSON for storage.
+    let tableRows = document.querySelectorAll('#calculatorForm table tbody tr');
+    let karakterBeregning = [];
+    tableRows.forEach((row) => {
+        let inputs = row.querySelectorAll('input');
+        let v = [];
+        inputs.forEach((inp) => {
+        v.push(inp.value);
+        });
+        karakterBeregning.push(v);
+    })
+    let res = {karakterBeregning};
+    document.getElementById('json').innerText = JSON.stringify(res,'','   ');
 }
 
 /**
@@ -88,7 +134,7 @@ function showCalculationsGradePoints() {
 function removeEmptyGradeInput() {
     const activeElementClass = document.activeElement.classList.contains('gradeInput') ? 'gradeInput' : document.activeElement.classList.contains('pointInput') ? 'pointInput' : undefined
 
-    for (let index = document.getElementsByClassName('gradeInputsRow').length - 2; index > 0; index--) {
+    for (let index = document.getElementsByClassName('gradeInputsRow').length - 2; index >= 0; index--) {
         const section = document.getElementsByClassName('gradeInputsRow')[index];
         
         if (section.getElementsByTagName('INPUT').length !== 0) {
