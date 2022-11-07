@@ -8,16 +8,16 @@ function loadTable(data) {
             const pointInputValue = value[1]
             const lastGradeInputsRow = document.getElementsByClassName('gradeInputsRow')[document.getElementsByClassName('gradeInputsRow').length - 1]
     
-            const added = addGradeInput(lastGradeInputsRow)
-            added.getElementsByClassName('gradeInput')[0].value = gradeInputValue
-            added.getElementsByClassName('pointInput')[0].value = pointInputValue
-            showCalculationsGradeInputs(added)
+            const row = addGradeInput(lastGradeInputsRow)
+            row.getElementsByClassName('gradeInput')[0].value = gradeInputValue
+            row.getElementsByClassName('pointInput')[0].value = pointInputValue
+            showCalculationsGradeInputs(row)
     
             if (index === 0) {
                 for (let index = document.getElementsByClassName('gradeInputsRow').length - 1; index >= 0; index--) {
                     const element = document.getElementsByClassName('gradeInputsRow')[index];
                     
-                    if (element !== added) {
+                    if (element !== row) {
                         element.remove()
                     }
                 }
@@ -114,22 +114,24 @@ function showCalculationsGradePoints() {
     }
 
     // Create JSON for storage.
-    let tableRows = document.querySelectorAll('#calculatorForm table tbody tr');
-    let karakterBeregning = [];
+    const tableRows = document.querySelectorAll('#calculatorForm table tbody tr');
+    const karakterBeregning = [];
+
     tableRows.forEach((row) => {
-        let inputs = row.querySelectorAll('input');
-        let v = [];
+        const inputs = row.querySelectorAll('input');
+        const v = [];
         inputs.forEach((inp) => {
-        v.push(inp.value);
+            v.push(inp.value);
         });
         karakterBeregning.push(v);
     })
-    let res = {karakterBeregning};
+
+    const res = {karakterBeregning};
     document.getElementById('json').innerText = JSON.stringify(res,'','   ');
 }
 
 /**
- * removes excess inputs
+ * removes excess input rows
  */
 function removeEmptyGradeInput() {
     const activeElementClass = document.activeElement.classList.contains('gradeInput') ? 'gradeInput' : document.activeElement.classList.contains('pointInput') ? 'pointInput' : undefined
