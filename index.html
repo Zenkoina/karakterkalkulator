@@ -39,48 +39,24 @@
 	</style>
 	<style>
 		#gradeAvg::before {
-		content: "Karaktersnitt: ";
+			content: "Karaktersnitt: ";
+		}
+
+		#gradeAvg::after {
+			content: " (sum tallverdi × studiepoeng / sum studiepoeng)";
 		}
 		
 		#gradePoints::before {
-		content: "Karakterpoeng: ";
+			content: "Karakterpoeng: ";
+		}
+
+		#gradePoints::after {
+			content: " (Karaktersnitt × 10)";
 		}
 	</style>
 </head>
 <body>
-	<main>
-		<form id="calculatorForm">
-			<table>
-				<thead>
-					<tr class="tableHeader">
-						<th>Karakter</th>
-						<th>Studiepoeng</th>
-						<th>Delsum</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr class="gradeInputsRow">
-						<td><input type="text" maxlength="1" pattern="[A-Fa-f]{1}" title="Bokstav fra A til F" class="gradeInput" placeholder="A-F"></td>
-						<td><input type="number" min="0" class="pointInput" title="Nummer" placeholder="Tall"></td>
-						<td class="summaryColumn pointValue"></td>
-					</tr>
-				</tbody>
-				<tfoot>
-					<tr>
-						<td colspan="2">Sum studiepoeng:</td>
-						<td id="sumPoints"></td>
-					</tr>
-					<tr>
-						<td colspan="2">Sum tallverdi &times; studiepoeng:</td>
-						<td id="sumNumxPoints"></td>
-					</tr>
-				</tfoot>
-			</table>
-			<p id="gradeAvg"></p>
-			<p id="gradePoints"></p>
-		</form>
-	</main>
-	<pre id="json"></pre>
+	<div id="karakterkalk"></div>
 	<script type="text/javascript" src="./index.js"></script>
 </body>
 </html>

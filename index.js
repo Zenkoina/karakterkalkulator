@@ -1,50 +1,36 @@
-function loadTable(data) {
-    data = JSON.parse(data)
-
-    if (data.karakterBeregning) {
-        for (let index = 0; index < data.karakterBeregning.length; index++) {
-            const value = data.karakterBeregning[index];
-            const gradeInputValue = value[0]
-            const pointInputValue = value[1]
-            const lastGradeInputsRow = document.getElementsByClassName('gradeInputsRow')[document.getElementsByClassName('gradeInputsRow').length - 1]
-    
-            const row = addGradeInput(lastGradeInputsRow)
-            row.getElementsByClassName('gradeInput')[0].value = gradeInputValue
-            row.getElementsByClassName('pointInput')[0].value = pointInputValue
-            showCalculationsGradeInputs(row)
-    
-            if (index === 0) {
-                for (let index = document.getElementsByClassName('gradeInputsRow').length - 1; index >= 0; index--) {
-                    const element = document.getElementsByClassName('gradeInputsRow')[index];
-                    
-                    if (element !== row) {
-                        element.remove()
-                    }
-                }
-            }
-        }
-
-        showCalculationsGradePoints()
-    }
-}
-
-function saveTable() {
-    // Create JSON for storage.
-    const tableRows = document.querySelectorAll('#calculatorForm table tbody tr');
-    const karakterBeregning = [];
-
-    tableRows.forEach((row) => {
-        const inputs = row.querySelectorAll('input');
-        const v = [];
-        inputs.forEach((inp) => {
-            v.push(inp.value);
-        });
-        karakterBeregning.push(v);
-    })
-
-    const res = {karakterBeregning};
-    document.getElementById('json').innerText = JSON.stringify(res,'','   ');
-}
+document.getElementById('karakterkalk').innerHTML = 
+`
+<form id="calculatorForm">
+    <table>
+        <thead>
+            <tr class="tableHeader">
+                <th>Bokstavkarakter</th>
+                <th>Studiepoeng</th>
+                <th>Tallverdi &times; studiepoeng</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="gradeInputsRow">
+                <td><input type="text" maxlength="1" pattern="[A-Fa-f]{1}" title="Bokstav fra A til F" class="gradeInput" placeholder="A-F"></td>
+                <td><input type="number" min="0" class="pointInput" title="Nummer" placeholder="Tall"></td>
+                <td class="summaryColumn pointValue"></td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="2">Sum studiepoeng:</td>
+                <td id="sumPoints"></td>
+            </tr>
+            <tr>
+                <td colspan="2">Sum tallverdi &times; studiepoeng:</td>
+                <td id="sumNumxPoints"></td>
+            </tr>
+        </tfoot>
+    </table>
+    <p id="gradeAvg"></p>
+    <p id="gradePoints"></p>
+</form>
+`;
 
 /**
  * Adds a clone of row below row
@@ -130,8 +116,6 @@ function showCalculationsGradePoints() {
         gradeAvg.innerHTML = ''
         gradePoints.innerHTML = ''
     }
-
-    saveTable()
 }
 
 /**
@@ -139,7 +123,7 @@ function showCalculationsGradePoints() {
  */
 function removeEmptyGradeInput() {
     const activeElementClass = document.activeElement.classList.contains('gradeInput') ? 'gradeInput' : document.activeElement.classList.contains('pointInput') ? 'pointInput' : undefined
-
+    
     for (let index = document.getElementsByClassName('gradeInputsRow').length - 2; index >= 0; index--) {
         const section = document.getElementsByClassName('gradeInputsRow')[index];
         
