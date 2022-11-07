@@ -28,6 +28,24 @@ function loadTable(data) {
     }
 }
 
+function saveTable() {
+    // Create JSON for storage.
+    const tableRows = document.querySelectorAll('#calculatorForm table tbody tr');
+    const karakterBeregning = [];
+
+    tableRows.forEach((row) => {
+        const inputs = row.querySelectorAll('input');
+        const v = [];
+        inputs.forEach((inp) => {
+            v.push(inp.value);
+        });
+        karakterBeregning.push(v);
+    })
+
+    const res = {karakterBeregning};
+    document.getElementById('json').innerText = JSON.stringify(res,'','   ');
+}
+
 /**
  * Adds a clone of row below row
  * @param {object} row htmldomobject
@@ -113,21 +131,7 @@ function showCalculationsGradePoints() {
         gradePoints.innerHTML = ''
     }
 
-    // Create JSON for storage.
-    const tableRows = document.querySelectorAll('#calculatorForm table tbody tr');
-    const karakterBeregning = [];
-
-    tableRows.forEach((row) => {
-        const inputs = row.querySelectorAll('input');
-        const v = [];
-        inputs.forEach((inp) => {
-            v.push(inp.value);
-        });
-        karakterBeregning.push(v);
-    })
-
-    const res = {karakterBeregning};
-    document.getElementById('json').innerText = JSON.stringify(res,'','   ');
+    saveTable()
 }
 
 /**
