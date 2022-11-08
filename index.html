@@ -24,39 +24,11 @@
 		width: 40rem;
 		}
 	</style>
-	<style>
-		#calculatorForm table {margin-bottom: 2rem;}
-		#calculatorForm table th {color: #008aa5;}
-		#calculatorForm table th:after {content: ":";}
-		#calculatorForm table td {vertical-align: baseline;}
-		#calculatorForm table th:last-child, #calculatorForm table td:last-child {text-align: right;}
-		#calculatorForm table tbody tr td {border-bottom: dotted 1px #ddd;}
-		#calculatorForm table tbody tr:last-child td {border-bottom: dotted 1px grey;}
-		#calculatorForm table tbody tr td input {max-width: 8rem;margin: .3rem 0;text-align: center;font-weight: bold;color: #004357;}
-		#calculatorForm table tfoot tr td {border-bottom: dotted 1px grey;padding: .4rem 0;font-style: italic;color: #008aa5;}
-		#calculatorForm table tfoot tr:last-child td:last-child {font-weight: bold;font-style: normal;color: black;}
-		#json {position: fixed;right: 0;top: 0;bottom: 0;background: lightyellow;width: 20rem;font-size: .8rem;color: maroon;}
-	</style>
-	<style>
-		#gradeAvg::before {
-			content: "Karaktersnitt: ";
-		}
-
-		#gradeAvg::after {
-			content: " (sum tallverdi × studiepoeng / sum studiepoeng)";
-		}
-		
-		#gradePoints::before {
-			content: "Karakterpoeng: ";
-		}
-
-		#gradePoints::after {
-			content: " (Karaktersnitt × 10)";
-		}
-	</style>
 </head>
 <body>
-	<div id="karakterkalk"></div>
-	<script type="text/javascript" src="./index.js"></script>
+	<details id="kalk" open><summary>Karakterkalkulator</summary>
+		<div id="karakterkalk"></div>
+		<script type="text/javascript" src="./index.js"></script>
+	</details>
 </body>
 </html>

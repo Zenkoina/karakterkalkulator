@@ -1,12 +1,57 @@
 document.getElementById('karakterkalk').innerHTML = 
 `
+<style>
+	#kalk {padding: 1.2rem 2.4rem;border-radius: 1rem;box-shadow: .4rem .4rem 1rem rgba(0,0,0,.3);width: clamp(20rem,100%,36rem);}
+	#kalk summary {cursor: pointer;font-weight: bold; color: #004357;}
+	#karakterkalk .descriptionCalculator {font-size: .8em;margin: 2rem 0;padding-bottom: 1rem;border-bottom: dotted 1px grey;}
+	#karakterkalk .descriptionCalculator summary {cursor: pointer;font-weight: bold;}
+	#calculatorForm table {margin-bottom: 2rem;}
+	#calculatorForm table th {font-size: .8rem;color: #008aa5;vertical-align: top;padding-left: .2rem;border-left: dotted 1px #ddd;}
+	#calculatorForm table th:first-child {border: none;}
+	#calculatorForm table th:after {content: ":";}
+	#calculatorForm table td {vertical-align: baseline;}
+	#calculatorForm table td:last-child {text-align: right;}
+	#calculatorForm table tbody tr td {border-bottom: dotted 1px #ddd;}
+	#calculatorForm table tbody tr:last-child td {border-bottom: dotted 1px grey;}
+	#calculatorForm table tbody tr td input {max-width: 8rem;margin: .3rem 0;text-align: center;font-weight: bold;color: #004357;}
+	#calculatorForm table tfoot tr td, #gradeAvg, #gradePoints {border-bottom: dotted 1px grey;padding: .4rem 0;font-style: italic;color: #008aa5;}
+	#utregning {padding-left: 1.2rem;border-left: dotted 1px #ddd;}
+	#utregning p {margin: 0 0 .2 0;padding-top: 0;}
+	#gradeAvg span, #gradePoints span {color: black;font-weight: bold;}
+	#calculatorForm table tfoot tr:last-child td:last-child {font-weight: bold;font-style: normal;color: black;}
+
+	#gradeAvg::before {
+		content: "Karaktersnitt: ";
+	}
+
+	#gradeAvg::after {
+		content: " (Sum tallverdi × studiepoeng / sum studiepoeng)";
+	}
+	
+	#gradePoints::before {
+		content: "Karakterpoeng: ";
+	}
+
+	#gradePoints::after {
+		content: " (Karaktersnitt × 10)";
+	}
+</style>
+<div class="descriptionCalculator">
+	<details><summary>Hjelp</summary>
+	<ul>
+		<li>Tast inn bokstavkarakter og studiepoeng i de respektive feltene. Ny rad opprettes automatisk, men bruk <em>tabulator</em> for å gå til neste rad.</li>
+		<li>Bokstavkaraktene har verdi henholdsvis <em>5 – 0</em> for bokstavene <em>A – F</em>.</li>
+		<li>Utregningen ser du nederst i kalkulatoren.</li>
+	</ul>
+	</details>
+</div>
 <form id="calculatorForm">
     <table>
         <thead>
             <tr class="tableHeader">
-                <th>Bokstavkarakter</th>
+                <th>Bokstav-<br>karakter</th>
                 <th>Studiepoeng</th>
-                <th>Tallverdi &times; studiepoeng</th>
+                <th>Karakters tallverdi<br>&times; studiepoeng</th>
             </tr>
         </thead>
         <tbody>
@@ -27,8 +72,10 @@ document.getElementById('karakterkalk').innerHTML =
             </tr>
         </tfoot>
     </table>
-    <p id="gradeAvg"></p>
-    <p id="gradePoints"></p>
+    <section id="utregning">
+    	<p id="gradeAvg"></p>
+    	<p id="gradePoints"></p>
+    </section>
 </form>
 `;
 
@@ -108,8 +155,8 @@ function showCalculationsGradePoints() {
     }
 
     if (sumPointsValue !== 0 || sumNumxPointsValue !== 0) {
-        gradeAvg.innerHTML = parseFloat((sumNumxPointsValue / sumPointsValue).toFixed(3))
-        gradePoints.innerHTML = parseFloat((sumNumxPointsValue / sumPointsValue * 10).toFixed(2))
+        gradeAvg.innerHTML = '<span>' + parseFloat((sumNumxPointsValue / sumPointsValue).toFixed(3)) + '</span>';
+        gradePoints.innerHTML = '<span>' + parseFloat((sumNumxPointsValue / sumPointsValue * 10).toFixed(2)) + '</span>';
     } else {
         sumPoints.innerHTML = ''
         sumNumxPoints.innerHTML = ''
