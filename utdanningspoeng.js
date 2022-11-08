@@ -15,8 +15,6 @@
         .eduCalculatorForm table tbody tr td {border-bottom: dotted 1px #ddd;}
         .eduCalculatorForm table tbody tr:last-child td {border-bottom: dotted 1px grey;}
         .eduCalculatorForm table tbody tr td input {max-width: 8rem;margin: .3rem 0;text-align: center;font-weight: bold;color: #004357;}
-        .eduCalculatorForm table tfoot tr td {border-bottom: dotted 1px grey;padding: .4rem 0;font-style: italic;color: #008aa5;}
-        .eduCalculatorForm table tfoot tr:last-child td:last-child {font-weight: bold;font-style: normal;color: black;}
     </style>
     <div class="descriptionCalculator">
         <details><summary>Hjelp</summary>
@@ -41,12 +39,6 @@
                     <td class="summaryColumn eduPointValue"></td>
                 </tr>
             </tbody>
-            <tfoot>
-                <tr>
-                    <td>Utdanningspoeng:</td>
-                    <td class="sumEduPoints"></td>
-                </tr>
-            </tfoot>
         </table>
     </form>
     `;
@@ -55,10 +47,8 @@
     const eduPointInput = form.querySelector('.eduPointInput')
     
     eduPointInput.addEventListener('input', () => {
-        const sumEduPoints = form.querySelector('.sumEduPoints')
         const eduPointValue = form.querySelector('.eduPointValue')
 
         eduPointValue.innerHTML = (eduPointInput.checkValidity() && eduPointInput.value !== '') ? Math.min(Math.floor(eduPointInput.value / 30), 4) : ''
-        sumEduPoints.innerHTML = (eduPointInput.checkValidity() && eduPointInput.value !== '') ? Math.min(Math.floor(eduPointInput.value / 30), 4) : ''
     })
 }
