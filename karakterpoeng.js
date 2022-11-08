@@ -1,11 +1,11 @@
 {
-    document.currentScript.parentElement.querySelector('.karakterkalk').innerHTML = 
+    document.currentScript.parentElement.querySelector('.Karakterpoengkalk').innerHTML = 
     `
     <style>
-        #kalk {padding: 1.2rem 2.4rem;border-radius: 1rem;box-shadow: .4rem .4rem 1rem rgba(0,0,0,.3);width: clamp(20rem,100%,36rem);margin-bottom: 2rem;}
-        #kalk summary {cursor: pointer;font-weight: bold; color: #004357;}
-        .karakterkalk .descriptionCalculator {font-size: .8em;margin: 2rem 0;padding-bottom: 1rem;border-bottom: dotted 1px grey;}
-        .karakterkalk .descriptionCalculator summary {cursor: pointer;font-weight: bold;}
+        .Karakterpoeng {padding: 1.2rem 2.4rem;border-radius: 1rem;box-shadow: .4rem .4rem 1rem rgba(0,0,0,.3);width: clamp(20rem,100%,36rem);margin-bottom: 2rem;}
+        .Karakterpoeng summary {cursor: pointer;font-weight: bold; color: #004357;}
+        .Karakterpoengkalk .descriptionCalculator {font-size: .8em;margin: 2rem 0;padding-bottom: 1rem;border-bottom: dotted 1px grey;}
+        .Karakterpoengkalk .descriptionCalculator summary {cursor: pointer;font-weight: bold;}
         .calculatorForm table {margin-bottom: 2rem;}
         .calculatorForm table th {font-size: .8rem;color: #008aa5;vertical-align: top;padding-left: .2rem;border-left: dotted 1px #ddd;}
         .calculatorForm table th:first-child {border: none;}
@@ -68,7 +68,7 @@
     </form>
     `;
 
-    const gradeForm = document.currentScript.parentElement.querySelector('.calculatorForm')
+    const form = document.currentScript.parentElement.querySelector('.calculatorForm')
 
     /**
      * Adds a clone of row below row
@@ -122,15 +122,15 @@
      * calculates all rows and shows results
      */
     function showCalculationsGradePoints() {
-        const sumPoints = gradeForm.querySelector('.sumPoints')
-        const sumNumxPoints = gradeForm.querySelector('.sumNumxPoints')
-        const gradeAvg = gradeForm.querySelector('.gradeAvg')
-        const gradePoints = gradeForm.querySelector('.gradePoints')
+        const sumPoints = form.querySelector('.sumPoints')
+        const sumNumxPoints = form.querySelector('.sumNumxPoints')
+        const gradeAvg = form.querySelector('.gradeAvg')
+        const gradePoints = form.querySelector('.gradePoints')
         let sumPointsValue = 0
         let sumNumxPointsValue = 0
 
-        for (let index = 0; index < gradeForm.querySelectorAll('.gradeInputsRow').length; index++) {
-            const row = gradeForm.querySelectorAll('.gradeInputsRow')[index];
+        for (let index = 0; index < form.querySelectorAll('.gradeInputsRow').length; index++) {
+            const row = form.querySelectorAll('.gradeInputsRow')[index];
             const pointInput = row.querySelector('.pointInput')
             const pointValue = row.querySelector('.pointValue')
 
@@ -159,18 +159,18 @@
     function removeEmptyGradeInput() {
         const activeElementClass = document.activeElement.classList.contains('gradeInput') ? 'gradeInput' : document.activeElement.classList.contains('pointInput') ? 'pointInput' : undefined
         
-        for (let index = gradeForm.querySelectorAll('.gradeInputsRow').length - 2; index >= 0; index--) {
-            const row = gradeForm.querySelectorAll('.gradeInputsRow')[index];
+        for (let index = form.querySelectorAll('.gradeInputsRow').length - 2; index >= 0; index--) {
+            const row = form.querySelectorAll('.gradeInputsRow')[index];
             const gradeInput = row.querySelector('.gradeInput')
             const pointInput = row.querySelector('.pointInput')
 
             if (gradeInput.value === '' && pointInput.value === '') {
                 if (document.activeElement.parentElement.parentElement === row) {
-                    gradeForm.querySelectorAll('.gradeInputsRow')[gradeForm.querySelectorAll('gradeInputsRow').length - 1].querySelector(`.${activeElementClass}`)[0].select()
+                    form.querySelectorAll('.gradeInputsRow')[form.querySelectorAll('gradeInputsRow').length - 1].querySelector(`.${activeElementClass}`)[0].select()
                 }
                 row.remove()
             } else if (gradeInput.value === '' || pointInput.value === '') {
-                gradeForm.querySelectorAll('.gradeInputsRow')[gradeForm.querySelectorAll('.gradeInputsRow').length - 1].remove()
+                form.querySelectorAll('.gradeInputsRow')[form.querySelectorAll('.gradeInputsRow').length - 1].remove()
                 return
             } else {
                 return
@@ -196,7 +196,7 @@
     function enterToNextInput(element) {
         element.addEventListener('keypress', (event) => {
             if (event.keyCode === 13) {
-                const inputs = Array.from(gradeForm.querySelectorAll('INPUT'))
+                const inputs = Array.from(form.querySelectorAll('INPUT'))
                 const next = event.shiftKey ? -1 : 1
                 const input = inputs[inputs.indexOf(element) + next]
                 if (input) {
@@ -213,7 +213,7 @@
     function handleGradeInput(element) {
         element.addEventListener('input', () => {
             const pointInput = element.parentElement.parentElement.querySelector('.pointInput')
-            const lastGradeInput = gradeForm.querySelectorAll('.gradeInput')[gradeForm.querySelectorAll('.gradeInput').length - 1]
+            const lastGradeInput = form.querySelectorAll('.gradeInput')[form.querySelectorAll('.gradeInput').length - 1]
 
             if (parseInt(element.value) <= 5 || element.value === '0') {
                 element.value = String.fromCharCode((element.value / -1) + 70)
@@ -245,7 +245,7 @@
     function handlePointInput(element) {
         element.addEventListener('input', () => {
             const gradeInput = element.parentElement.parentElement.querySelector('.gradeInput')
-            const lastPointInput = gradeForm.querySelectorAll('.pointInput')[gradeForm.querySelectorAll('.pointInput').length - 1]
+            const lastPointInput = form.querySelectorAll('.pointInput')[form.querySelectorAll('.pointInput').length - 1]
 
             if (element.checkValidity() && element.value !== '') {
                 if (gradeInput.value !== '') {
@@ -264,13 +264,13 @@
     }
 
     //Add events to already existing inputs
-    for (let index = 0; index < gradeForm.querySelectorAll('.gradeInput').length; index++) {
-        const element = gradeForm.querySelectorAll('.gradeInput')[index];
+    for (let index = 0; index < form.querySelectorAll('.gradeInput').length; index++) {
+        const element = form.querySelectorAll('.gradeInput')[index];
         handleGradeInput(element)
     }
 
-    for (let index = 0; index < gradeForm.querySelectorAll('.pointInput').length; index++) {
-        const element = gradeForm.querySelectorAll('.pointInput')[index];
+    for (let index = 0; index < form.querySelectorAll('.pointInput').length; index++) {
+        const element = form.querySelectorAll('.pointInput')[index];
         handlePointInput(element)
     }
 }

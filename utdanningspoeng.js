@@ -1,11 +1,11 @@
 {
-    document.currentScript.parentElement.querySelector('.utdanningspoengkalk').innerHTML = 
+    document.currentScript.parentElement.querySelector('.Utdanningspoengkalk').innerHTML = 
     `
     <style>
-        #kalk2 {padding: 1.2rem 2.4rem;border-radius: 1rem;box-shadow: .4rem .4rem 1rem rgba(0,0,0,.3);width: clamp(20rem,100%,36rem);margin-bottom: 2rem;}
-        #kalk2 summary {cursor: pointer;font-weight: bold; color: #004357;}
-        .utdanningspoengkalk .descriptionCalculator {font-size: .8em;margin: 2rem 0;padding-bottom: 1rem;border-bottom: dotted 1px grey;}
-        .utdanningspoengkalk .descriptionCalculator summary {cursor: pointer;font-weight: bold;}
+        .Utdanningspoeng {padding: 1.2rem 2.4rem;border-radius: 1rem;box-shadow: .4rem .4rem 1rem rgba(0,0,0,.3);width: clamp(20rem,100%,36rem);margin-bottom: 2rem;}
+        .Utdanningspoeng summary {cursor: pointer;font-weight: bold; color: #004357;}
+        .Utdanningspoengkalk .descriptionCalculator {font-size: .8em;margin: 2rem 0;padding-bottom: 1rem;border-bottom: dotted 1px grey;}
+        .Utdanningspoengkalk .descriptionCalculator summary {cursor: pointer;font-weight: bold;}
         .eduCalculatorForm table {margin-bottom: 2rem;}
         .eduCalculatorForm table th {font-size: .8rem;color: #008aa5;vertical-align: top;padding-left: .2rem;border-left: dotted 1px #ddd;}
         .eduCalculatorForm table th:first-child {border: none;}
@@ -56,7 +56,9 @@
     
     eduPointInput.addEventListener('input', () => {
         const sumEduPoints = form.querySelector('.sumEduPoints')
-    
+        const eduPointValue = form.querySelector('.eduPointValue')
+
+        eduPointValue.innerHTML = (eduPointInput.checkValidity() && eduPointInput.value !== '') ? Math.min(Math.floor(eduPointInput.value / 30), 4) : ''
         sumEduPoints.innerHTML = (eduPointInput.checkValidity() && eduPointInput.value !== '') ? Math.min(Math.floor(eduPointInput.value / 30), 4) : ''
     })
 }
