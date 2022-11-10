@@ -1,11 +1,14 @@
-{
-    document.currentScript.parentElement.querySelector('.Utdanningspoengkalk').innerHTML = 
-    `
+/**
+ * Draws out HTML framework and adds functionality to it for a visual and interactive calculator tool.
+ * @author Ole Brede, Terje Rudi.
+ */
+ async function startUtdanningspoengKalkulator(){
+    document.querySelector('.Utdanningspoeng').querySelector('summary').insertAdjacentHTML('afterend', `
     <style>
         .Utdanningspoeng {padding: 1.2rem 2.4rem;border-radius: 1rem;box-shadow: .4rem .4rem 1rem rgba(0,0,0,.3);width: clamp(20rem,100%,36rem);margin-bottom: 2rem;}
         .Utdanningspoeng summary {cursor: pointer;font-weight: bold; color: #004357;}
-        .Utdanningspoengkalk .descriptionCalculator {font-size: .8em;margin: 2rem 0;padding-bottom: 1rem;border-bottom: dotted 1px grey;}
-        .Utdanningspoengkalk .descriptionCalculator summary {cursor: pointer;font-weight: bold;}
+        .descriptionCalculator {font-size: .8em;margin: 2rem 0;padding-bottom: 1rem;border-bottom: dotted 1px grey;}
+        .descriptionCalculator summary {cursor: pointer;font-weight: bold;}
         .eduCalculatorForm table {margin-bottom: 2rem;}
         .eduCalculatorForm table th {font-size: .8rem;color: #008aa5;vertical-align: top;padding-left: .2rem;border-left: dotted 1px #ddd;}
         .eduCalculatorForm table th:first-child {border: none;}
@@ -19,9 +22,9 @@
     <div class="descriptionCalculator">
         <details><summary>Hjelp</summary>
         <ul>
-            <li>Tast inn studiepoeng i feltet.</li>
+            <li>Tast inn studie&shy;poeng i feltet.</li>
             <li>1 utdanningspoeng = 30 studiepoeng.</li>
-            <li>Utregningen ser du nederst i kalkulatoren.</li>
+            <li>Ut&shy;regningen ser du nederst i kalku&shy;latoren.</li>
         </ul>
         </details>
     </div>
@@ -29,8 +32,8 @@
         <table>
             <thead>
                 <tr class="tableHeader">
-                    <th>Studiepoeng</th>
-                    <th>Utdanningspoeng</th>
+                    <th>Studie&shy;poeng</th>
+                    <th>Utdannings&shy;poeng</th>
                 </tr>
             </thead>
             <tbody>
@@ -41,14 +44,16 @@
             </tbody>
         </table>
     </form>
-    `;
+    `)
 
-    const form = document.currentScript.parentElement.querySelector('.eduCalculatorForm')
+    const form = document.querySelector('.eduCalculatorForm')
     const eduPointInput = form.querySelector('.eduPointInput')
-    
+
     eduPointInput.addEventListener('input', () => {
         const eduPointValue = form.querySelector('.eduPointValue')
 
         eduPointValue.innerHTML = (eduPointInput.checkValidity() && eduPointInput.value !== '') ? Math.min(Math.floor(eduPointInput.value / 30), 4) : ''
     })
 }
+
+startUtdanningspoengKalkulator()
