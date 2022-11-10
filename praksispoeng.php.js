@@ -56,13 +56,13 @@
                     <td><input type="date" title="Sluttdato" class="endDateInput"></td>
                     <td><input type="number" min="0" max="100" class="percentInput" title="Prosent" placeholder="%"></td>
                     <td><input type="number" min="0" class="extraInput" title="Tall" placeholder="Timer"></td>
-                    <td colspan="2" "class="summaryColumn monthsValue"></td>
+                    <td colspan="2" class="summaryColumn monthsValue"></td>
                 </tr>
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="2">Sum måneder i 100% stilling:</td>
-                    <td colspan="2" "class="summaryColumn sumMonths"></td>
+                    <td colspan="3">Sum måneder i 100% stilling:</td>
+                    <td colspan="2" class="summaryColumn sumMonths"></td>
                 </tr>
             </tfoot>
         </table>
@@ -75,7 +75,7 @@
             </thead>
             <tbody>
                 <tr class="obligationInputRow">
-                    <td><input type="number" min="0" class="extraInput" title="Tall" placeholder="År"></td>
+                    <td><input type="number" min="0" class="obligatedYears" title="Tall" placeholder="År"></td>
                     <td class="summaryColumn minMonths"></td>
                 </tr>
             </tbody>
@@ -89,16 +89,93 @@
 
     const form = document.querySelector('.practiceCalculatorForm')
 
+    function addPraksisInputRow(row) {
+        if (row.parentElement.querySelectorAll('.praksisInputRow')[row.parentElement.querySelectorAll('.praksisInputRow').length - 1] !== row) {return}
+
+        clone = row.cloneNode(true)
+
+        for (let index = 0; index < clone.querySelectorAll('INPUT').length; index++) {
+                const element = clone.querySelectorAll('INPUT')[index];
+                element.value = ''
+
+                if (element.classList.contains('beginDateInput')) {
+                        handleBeginDateInput(element)
+                }
+
+                if (element.classList.contains('endDateInput')) {
+                        handleEndDateInput(element)
+                }
+
+                if (element.classList.contains('percentInput')) {
+                    handlePercentInput(element)
+                }
+
+                if (element.classList.contains('extraInput')) {
+                    handleExtraInput(element)
+                }
+        }
+
+        for (let index = 0; index < clone.querySelectorAll('TD').length; index++) {
+                const element = clone.querySelectorAll('TD')[index];
+                if (element.children.length === 0) {
+                        element.innerHTML = ''
+                }
+        }
+
+        row.insertAdjacentElement('afterend', clone)
+
+        return clone
+    }
+
     function showCalculationsRow(row) {
         const beginDateInput = row.querySelector('.beginDateInput')
         const endDateInput = row.querySelector('.endDateInput')
         const percentInput = row.querySelector('.percentInput')
         const extraInput = row.querySelector('.extraInput')
-        const monthsValue = form.querySelector('.monthsValue')
-        console.log(sumMonths)
+        const monthsValue = row.querySelector('.monthsValue')
 
         if (beginDateInput.checkValidity() && endDateInput.checkValidity() && percentInput.checkValidity() && beginDateInput.value !== '' && endDateInput.value !== '' && percentInput.value !== '') {
-            monthsValue.innerHTML = 'lol'
+            monthsValue.innerHTML = parseFloat(((endDateInput.valueAsNumber - beginDateInput.valueAsNumber) * percentInput.value / 100 / 31536000000 * 12).toFixed(2))
+
+            if (extraInput.checkValidity() && extraInput.value !== '') {
+                monthsValue.innerHTML = parseFloat((parseFloat(monthsValue.innerHTML) + extraInput.value / 150).toFixed(2))
+            }
+
+            monthsValue.innerHTML = parseFloat(monthsValue.innerHTML) > 0 || monthsValue.innerHTML === '0' ? monthsValue.innerHTML : ''
+
+            addPraksisInputRow(row)
+        } else {
+            monthsValue.innerHTML = ''
+        }
+
+        showCalculationsOverall()
+    }
+
+    function showCalculationsOverall() {
+        const sumMonths = form.querySelector('.sumMonths')
+        const minMonths = form.querySelector('.minMonths')
+        const countingMonths = form.querySelector('.countingMonths')
+        const praksisPoints = form.querySelector('.praksisPoints')
+        let sumMonthsValue = 0
+
+        for (let index = 0; index < form.querySelectorAll('.praksisInputRow').length; index++) {
+            const row = form.querySelectorAll('.praksisInputRow')[index];
+            const monthsValue = row.querySelector('.monthsValue')
+
+            if (monthsValue.innerHTML !== '') {
+                    sumMonthsValue += parseFloat(monthsValue.innerHTML)
+                    sumMonths.innerHTML = parseFloat(sumMonthsValue.toFixed(2))
+            }
+        }
+
+        if (sumMonthsValue !== 0) {
+            const monthsSubtract = minMonths.innerHTML !== '' ? minMonths.innerHTML : 0
+            countingMonths.innerHTML = '<span>' + parseFloat((sumMonthsValue - monthsSubtract).toFixed(2)) + '</span>';
+            praksisPoints.innerHTML = '<span>' + parseFloat((Math.floor((sumMonthsValue - monthsSubtract) / 12) * 2).toFixed(2)) + '</span>';
+        } else {
+            sumMonths.innerHTML = ''
+            countingMonths.innerHTML = ''
+            praksisPoints.innerHTML = ''
         }
     }
 
@@ -110,10 +187,49 @@
         })
     }
 
+    function handleEndDateInput(input) {
+        input.addEventListener('input', () => {
+            if (input.checkValidity() && input.value !== '') {
+                showCalculationsRow(input.parentElement.parentElement)
+            }
+        })
+    }
+
+    function handlePercentInput(input) {
+        input.addEventListener('input', () => {
+            if (input.checkValidity() && input.value !== '') {
+                showCalculationsRow(input.parentElement.parentElement)
+            }
+        })
+    }
+
+    function handleExtraInput(input) {
+        input.addEventListener('input', () => {
+            if (input.checkValidity() && input.value !== '') {
+                showCalculationsRow(input.parentElement.parentElement)
+            }
+        })
+    }
+
     //Add events to already existing inputs
     for (let index = 0; index < form.querySelectorAll('.beginDateInput').length; index++) {
         const element = form.querySelectorAll('.beginDateInput')[index];
         handleBeginDateInput(element)
+    }
+
+    for (let index = 0; index < form.querySelectorAll('.endDateInput').length; index++) {
+        const element = form.querySelectorAll('.endDateInput')[index];
+        handleEndDateInput(element)
+    }
+
+    for (let index = 0; index < form.querySelectorAll('.percentInput').length; index++) {
+        const element = form.querySelectorAll('.percentInput')[index];
+        handlePercentInput(element)
+    }
+
+    for (let index = 0; index < form.querySelectorAll('.extraInput').length; index++) {
+        const element = form.querySelectorAll('.extraInput')[index];
+        handleExtraInput(element)
     }
 }
 
