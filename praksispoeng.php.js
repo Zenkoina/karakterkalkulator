@@ -1,3 +1,5 @@
+//TODO: tellende måneder og praksispoeng kan være negativ hvis obligatedyears er 1 eller høyere
+
 /**
  * Draws out HTML framework and adds functionality to it for a visual and interactive calculator tool.
  * @author Ole Brede, Terje Rudi.
@@ -210,6 +212,17 @@
             }
         })
     }
+
+    const obligatedYears = form.querySelector('.obligatedYears')
+    const minMonths = form.querySelector('.minMonths')
+
+    obligatedYears.addEventListener('input', () => {
+        if (obligatedYears.checkValidity() && obligatedYears.value !== '') {
+            minMonths.innerHTML = obligatedYears.value * 12
+        } else {
+            minMonths.innerHTML = ''
+        }
+    })
 
     //Add events to already existing inputs
     for (let index = 0; index < form.querySelectorAll('.beginDateInput').length; index++) {
