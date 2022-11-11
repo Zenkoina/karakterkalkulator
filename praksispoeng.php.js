@@ -1,5 +1,3 @@
-//TODO: tellende måneder og praksispoeng kan være negativ hvis obligatedyears er 1 eller høyere
-
 /**
  * Draws out HTML framework and adds functionality to it for a visual and interactive calculator tool.
  * @author Ole Brede, Terje Rudi.
@@ -97,24 +95,9 @@
         clone = row.cloneNode(true)
 
         for (let index = 0; index < clone.querySelectorAll('INPUT').length; index++) {
-                const element = clone.querySelectorAll('INPUT')[index];
-                element.value = ''
-
-                if (element.classList.contains('beginDateInput')) {
-                        handleBeginDateInput(element)
-                }
-
-                if (element.classList.contains('endDateInput')) {
-                        handleEndDateInput(element)
-                }
-
-                if (element.classList.contains('percentInput')) {
-                    handlePercentInput(element)
-                }
-
-                if (element.classList.contains('extraInput')) {
-                    handleExtraInput(element)
-                }
+                const input = clone.querySelectorAll('INPUT')[index];
+                input.value = ''
+                handlePraksisInputRowInputs(input)
         }
 
         for (let index = 0; index < clone.querySelectorAll('TD').length; index++) {
@@ -129,6 +112,33 @@
         return clone
     }
 
+    function monthDayCount(date) {
+        const count = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+
+        //account for leap years
+        count[1] = (date.getFullYear() % 4 === 0 && (date.getFullYear() % 100 !== 0 || date.getFullYear() % 400 === 0)) ? 29 : count[1]
+
+        return count[date.getMonth()]
+    }
+
+    function monthDiff(date1, date2) {
+        if (date1 > date2) {return}
+
+        let months = (date2.getFullYear() - date1.getFullYear()) * 12
+        months -= date1.getMonth()
+        months += date2.getMonth()
+
+        let days = Math.abs(date2.getDate() - date1.getDate())
+
+        if (date1.getDate() > date2.getDate()) {
+            months -= days / monthDayCount(date1)
+        } else {
+            months += days / monthDayCount(date2)
+        }
+
+        return months
+    }
+
     function showCalculationsRow(row) {
         const beginDateInput = row.querySelector('.beginDateInput')
         const endDateInput = row.querySelector('.endDateInput')
@@ -137,7 +147,7 @@
         const monthsValue = row.querySelector('.monthsValue')
 
         if (beginDateInput.checkValidity() && endDateInput.checkValidity() && percentInput.checkValidity() && beginDateInput.value !== '' && endDateInput.value !== '' && percentInput.value !== '') {
-            monthsValue.innerHTML = parseFloat(((endDateInput.valueAsNumber - beginDateInput.valueAsNumber) * percentInput.value / 100 / 31536000000 * 12).toFixed(2))
+            monthsValue.innerHTML = parseFloat((monthDiff(beginDateInput.valueAsDate, endDateInput.valueAsDate) * percentInput.value / 100).toFixed(2))
 
             if (extraInput.checkValidity() && extraInput.value !== '') {
                 monthsValue.innerHTML = parseFloat((parseFloat(monthsValue.innerHTML) + extraInput.value / 150).toFixed(2))
@@ -170,46 +180,22 @@
             }
         }
 
-        if (sumMonthsValue !== 0) {
-            const monthsSubtract = minMonths.innerHTML !== '' ? minMonths.innerHTML : 0
+        const monthsSubtract = minMonths.innerHTML !== '' ? minMonths.innerHTML : 0
+
+        if (sumMonthsValue !== 0 && sumMonthsValue - monthsSubtract >= 0) {
             countingMonths.innerHTML = '<span>' + parseFloat((sumMonthsValue - monthsSubtract).toFixed(2)) + '</span>';
-            praksisPoints.innerHTML = '<span>' + parseFloat((Math.floor((sumMonthsValue - monthsSubtract) / 12) * 2).toFixed(2)) + '</span>';
-        } else {
+            praksisPoints.innerHTML = '<span>' + Math.min(parseFloat((Math.floor((sumMonthsValue - monthsSubtract) / 12) * 2).toFixed(2)), 6) + '</span>';
+        } else if (sumMonthsValue === 0) {
             sumMonths.innerHTML = ''
+        } else {
             countingMonths.innerHTML = ''
             praksisPoints.innerHTML = ''
         }
     }
 
-    function handleBeginDateInput(input) {
+    function handlePraksisInputRowInputs(input) {
         input.addEventListener('input', () => {
-            if (input.checkValidity() && input.value !== '') {
-                showCalculationsRow(input.parentElement.parentElement)
-            }
-        })
-    }
-
-    function handleEndDateInput(input) {
-        input.addEventListener('input', () => {
-            if (input.checkValidity() && input.value !== '') {
-                showCalculationsRow(input.parentElement.parentElement)
-            }
-        })
-    }
-
-    function handlePercentInput(input) {
-        input.addEventListener('input', () => {
-            if (input.checkValidity() && input.value !== '') {
-                showCalculationsRow(input.parentElement.parentElement)
-            }
-        })
-    }
-
-    function handleExtraInput(input) {
-        input.addEventListener('input', () => {
-            if (input.checkValidity() && input.value !== '') {
-                showCalculationsRow(input.parentElement.parentElement)
-            }
+            showCalculationsRow(input.parentElement.parentElement)
         })
     }
 
@@ -222,27 +208,17 @@
         } else {
             minMonths.innerHTML = ''
         }
+
+        showCalculationsOverall()
     })
 
     //Add events to already existing inputs
-    for (let index = 0; index < form.querySelectorAll('.beginDateInput').length; index++) {
-        const element = form.querySelectorAll('.beginDateInput')[index];
-        handleBeginDateInput(element)
-    }
-
-    for (let index = 0; index < form.querySelectorAll('.endDateInput').length; index++) {
-        const element = form.querySelectorAll('.endDateInput')[index];
-        handleEndDateInput(element)
-    }
-
-    for (let index = 0; index < form.querySelectorAll('.percentInput').length; index++) {
-        const element = form.querySelectorAll('.percentInput')[index];
-        handlePercentInput(element)
-    }
-
-    for (let index = 0; index < form.querySelectorAll('.extraInput').length; index++) {
-        const element = form.querySelectorAll('.extraInput')[index];
-        handleExtraInput(element)
+    for (let index = 0; index < form.querySelectorAll('.praksisInputRow').length; index++) {
+        const row = form.querySelectorAll('.praksisInputRow')[index];
+        for (let index = 0; index < row.querySelectorAll('input').length; index++) {
+            const input = row.querySelectorAll('input')[index];
+            handlePraksisInputRowInputs(input)
+        }
     }
 }
 
