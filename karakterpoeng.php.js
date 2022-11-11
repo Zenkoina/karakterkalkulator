@@ -3,6 +3,12 @@
  * @author Ole Brede, Terje Rudi.
  */
  async function startKarakterpoengKalkulator(){
+    document.currentScript.insertAdjacentHTML('afterend', `
+    <details class="Karakterpoeng">
+        <summary>Karakterpoeng&shy;kalkulator</summary>
+	</details>
+    `)
+    document.querySelector('.Karakterpoeng').appendChild(document.currentScript)
     document.querySelector('.Karakterpoeng').querySelector('summary').insertAdjacentHTML('afterend', `
     <style>
         .Karakterpoeng {padding: 1.2rem 2.4rem;border-radius: 1rem;box-shadow: .4rem .4rem 1rem rgba(0,0,0,.3);width: clamp(20rem,100%,36rem);margin-bottom: 2rem;}
@@ -82,31 +88,31 @@
      * @param {object} row htmldomobject
      */
     function addGradeInput(row) {
-            clone = row.cloneNode(true)
+        clone = row.cloneNode(true)
 
-            for (let index = 0; index < clone.querySelectorAll('INPUT').length; index++) {
-                    const element = clone.querySelectorAll('INPUT')[index];
-                    element.value = ''
+        for (let index = 0; index < clone.querySelectorAll('INPUT').length; index++) {
+            const element = clone.querySelectorAll('INPUT')[index];
+            element.value = ''
 
-                    if (element.classList.contains('gradeInput')) {
-                            handleGradeInput(element)
-                    }
-
-                    if (element.classList.contains('pointInput')) {
-                            handlePointInput(element)
-                    }
+            if (element.classList.contains('gradeInput')) {
+                handleGradeInput(element)
             }
 
-            for (let index = 0; index < clone.querySelectorAll('TD').length; index++) {
-                    const element = clone.querySelectorAll('TD')[index];
-                    if (element.children.length === 0) {
-                            element.innerHTML = ''
-                    }
+            if (element.classList.contains('pointInput')) {
+                handlePointInput(element)
             }
+        }
 
-            row.insertAdjacentElement('afterend', clone)
+        for (let index = 0; index < clone.querySelectorAll('TD').length; index++) {
+            const element = clone.querySelectorAll('TD')[index];
+            if (element.children.length === 0) {
+                element.innerHTML = ''
+            }
+        }
 
-            return clone
+        row.insertAdjacentElement('afterend', clone)
+
+        return clone
     }
 
     /**
@@ -114,75 +120,75 @@
      * @param {object} row htmldomobject
      */
     function showCalculationsGradeInputs(row) {
-            const gradeInput = row.querySelector('.gradeInput')
-            const pointInput = row.querySelector('.pointInput')
-            const pointValue = row.querySelector('.pointValue')
+        const gradeInput = row.querySelector('.gradeInput')
+        const pointInput = row.querySelector('.pointInput')
+        const pointValue = row.querySelector('.pointValue')
 
-            if (gradeInput.checkValidity() && pointInput.checkValidity() && gradeInput.value !== '' && pointInput.value !== '') {
-                    pointValue.innerHTML = pointInput.value * ((gradeInput.value.toUpperCase().charCodeAt(0) / -1) + 70)
-            } else {
-                    pointValue.innerHTML = ''
-            }
+        if (gradeInput.checkValidity() && pointInput.checkValidity() && gradeInput.value !== '' && pointInput.value !== '') {
+            pointValue.innerHTML = pointInput.value * ((gradeInput.value.toUpperCase().charCodeAt(0) / -1) + 70)
+        } else {
+            pointValue.innerHTML = ''
+        }
     }
 
     /**
      * calculates all rows and shows results
      */
     function showCalculationsGradePoints() {
-            const sumPoints = form.querySelector('.sumPoints')
-            const sumNumxPoints = form.querySelector('.sumNumxPoints')
-            const gradeAvg = form.querySelector('.gradeAvg')
-            const gradePoints = form.querySelector('.gradePoints')
-            let sumPointsValue = 0
-            let sumNumxPointsValue = 0
+        const sumPoints = form.querySelector('.sumPoints')
+        const sumNumxPoints = form.querySelector('.sumNumxPoints')
+        const gradeAvg = form.querySelector('.gradeAvg')
+        const gradePoints = form.querySelector('.gradePoints')
+        let sumPointsValue = 0
+        let sumNumxPointsValue = 0
 
-            for (let index = 0; index < form.querySelectorAll('.gradeInputsRow').length; index++) {
-                    const row = form.querySelectorAll('.gradeInputsRow')[index];
-                    const pointInput = row.querySelector('.pointInput')
-                    const pointValue = row.querySelector('.pointValue')
+        for (let index = 0; index < form.querySelectorAll('.gradeInputsRow').length; index++) {
+            const row = form.querySelectorAll('.gradeInputsRow')[index];
+            const pointInput = row.querySelector('.pointInput')
+            const pointValue = row.querySelector('.pointValue')
 
-                    if (pointInput.value !== '' && pointValue.innerHTML !== '') {
-                            sumPointsValue += parseInt(pointInput.value)
-                            sumNumxPointsValue += parseInt(pointValue.innerHTML)
-                            sumPoints.innerHTML = sumPointsValue
-                            sumNumxPoints.innerHTML = sumNumxPointsValue
-                    }
+            if (pointInput.value !== '' && pointValue.innerHTML !== '') {
+                sumPointsValue += parseInt(pointInput.value)
+                sumNumxPointsValue += parseInt(pointValue.innerHTML)
+                sumPoints.innerHTML = sumPointsValue
+                sumNumxPoints.innerHTML = sumNumxPointsValue
             }
+        }
 
-            if (sumPointsValue !== 0 || sumNumxPointsValue !== 0) {
-                    gradeAvg.innerHTML = '<span>' + parseFloat((sumNumxPointsValue / sumPointsValue).toFixed(3)) + '</span>';
-                    gradePoints.innerHTML = '<span>' + parseFloat((sumNumxPointsValue / sumPointsValue * 10).toFixed(2)) + '</span>';
-            } else {
-                    sumPoints.innerHTML = ''
-                    sumNumxPoints.innerHTML = ''
-                    gradeAvg.innerHTML = ''
-                    gradePoints.innerHTML = ''
-            }
+        if (sumPointsValue !== 0 || sumNumxPointsValue !== 0) {
+            gradeAvg.innerHTML = '<span>' + parseFloat((sumNumxPointsValue / sumPointsValue).toFixed(3)) + '</span>';
+            gradePoints.innerHTML = '<span>' + parseFloat((sumNumxPointsValue / sumPointsValue * 10).toFixed(2)) + '</span>';
+        } else {
+            sumPoints.innerHTML = ''
+            sumNumxPoints.innerHTML = ''
+            gradeAvg.innerHTML = ''
+            gradePoints.innerHTML = ''
+        }
     }
 
     /**
      * removes excess input rows
      */
     function removeEmptyGradeInput() {
-            const activeElementClass = document.activeElement.classList.contains('gradeInput') ? 'gradeInput' : document.activeElement.classList.contains('pointInput') ? 'pointInput' : undefined
+        const activeElementClass = document.activeElement.classList.contains('gradeInput') ? 'gradeInput' : document.activeElement.classList.contains('pointInput') ? 'pointInput' : undefined
 
-            for (let index = form.querySelectorAll('.gradeInputsRow').length - 2; index >= 0; index--) {
-                    const row = form.querySelectorAll('.gradeInputsRow')[index];
-                    const gradeInput = row.querySelector('.gradeInput')
-                    const pointInput = row.querySelector('.pointInput')
+        for (let index = form.querySelectorAll('.gradeInputsRow').length - 2; index >= 0; index--) {
+            const row = form.querySelectorAll('.gradeInputsRow')[index];
+            const gradeInput = row.querySelector('.gradeInput')
+            const pointInput = row.querySelector('.pointInput')
 
-                    if (gradeInput.value === '' && pointInput.value === '') {
-                            if (document.activeElement.parentElement.parentElement === row) {
-                                    form.querySelectorAll('.gradeInputsRow')[form.querySelectorAll('gradeInputsRow').length - 1].querySelector(`.${activeElementClass}`)[0].select()
-                            }
-                            row.remove()
-                    } else if (gradeInput.value === '' || pointInput.value === '') {
-                            form.querySelectorAll('.gradeInputsRow')[form.querySelectorAll('.gradeInputsRow').length - 1].remove()
-                            return
-                    } else {
-                            return
-                    }
+            if (gradeInput.value === '' && pointInput.value === '') {
+                if (document.activeElement.parentElement.parentElement === row) {
+                    form.querySelectorAll('.gradeInputsRow')[form.querySelectorAll('gradeInputsRow').length - 1].querySelector(`.${activeElementClass}`)[0].select()
+                }
+                row.remove()
+            } else if (gradeInput.value === '' || pointInput.value === '') {
+                form.querySelectorAll('.gradeInputsRow')[form.querySelectorAll('.gradeInputsRow').length - 1].remove()
+                return
+            } else {
+                return
             }
+        }
     }
 
     /**
@@ -190,9 +196,9 @@
      * @param {object} element htmldomobject
      */
     function reportValidityBlur(element) {
-            element.addEventListener('blur', () => {
-                    element.reportValidity()
-            })
+        element.addEventListener('blur', () => {
+            element.reportValidity()
+        })
     }
 
     /**
@@ -201,16 +207,16 @@
      * @param {object} element htmldomobject
      */
     function enterToNextInput(element) {
-            element.addEventListener('keypress', (event) => {
-                    if (event.keyCode === 13) {
-                            const inputs = Array.from(form.querySelectorAll('INPUT'))
-                            const next = event.shiftKey ? -1 : 1
-                            const input = inputs[inputs.indexOf(element) + next]
-                            if (input) {
-                                    input.select()
-                            }
-                    }
-            })
+        element.addEventListener('keypress', (event) => {
+            if (event.keyCode === 13) {
+                const inputs = Array.from(form.querySelectorAll('INPUT'))
+                const next = event.shiftKey ? -1 : 1
+                const input = inputs[inputs.indexOf(element) + next]
+                if (input) {
+                    input.select()
+                }
+            }
+        })
     }
 
     /**
@@ -218,31 +224,31 @@
      * @param {object} element htmldomobject
      */
     function handleGradeInput(element) {
-            element.addEventListener('input', () => {
-                    const pointInput = element.parentElement.parentElement.querySelector('.pointInput')
-                    const lastGradeInput = form.querySelectorAll('.gradeInput')[form.querySelectorAll('.gradeInput').length - 1]
+        element.addEventListener('input', () => {
+            const pointInput = element.parentElement.parentElement.querySelector('.pointInput')
+            const lastGradeInput = form.querySelectorAll('.gradeInput')[form.querySelectorAll('.gradeInput').length - 1]
 
-                    if (parseInt(element.value) <= 5 || element.value === '0') {
-                            element.value = String.fromCharCode((element.value / -1) + 70)
+            if (parseInt(element.value) <= 5 || element.value === '0') {
+                element.value = String.fromCharCode((element.value / -1) + 70)
+            }
+
+            if (element.checkValidity() && element.value !== '') {
+                element.value = element.value.toUpperCase()
+                pointInput.select()
+
+                if (pointInput.value !== '') {
+                    if (lastGradeInput === element) {
+                        addGradeInput(element.parentElement.parentElement)
                     }
+                }
+            }
+            showCalculationsGradeInputs(element.parentElement.parentElement)
+            showCalculationsGradePoints()
+            removeEmptyGradeInput()
+        })
 
-                    if (element.checkValidity() && element.value !== '') {
-                            element.value = element.value.toUpperCase()
-                            pointInput.select()
-
-                            if (pointInput.value !== '') {
-                                    if (lastGradeInput === element) {
-                                            addGradeInput(element.parentElement.parentElement)
-                                    }
-                            }
-                    }
-                    showCalculationsGradeInputs(element.parentElement.parentElement)
-                    showCalculationsGradePoints()
-                    removeEmptyGradeInput()
-            })
-
-            reportValidityBlur(element)
-            enterToNextInput(element)
+        reportValidityBlur(element)
+        enterToNextInput(element)
     }
 
     /**
@@ -250,35 +256,35 @@
      * @param {object} element htmldomobject
      */
     function handlePointInput(element) {
-            element.addEventListener('input', () => {
-                    const gradeInput = element.parentElement.parentElement.querySelector('.gradeInput')
-                    const lastPointInput = form.querySelectorAll('.pointInput')[form.querySelectorAll('.pointInput').length - 1]
+        element.addEventListener('input', () => {
+            const gradeInput = element.parentElement.parentElement.querySelector('.gradeInput')
+            const lastPointInput = form.querySelectorAll('.pointInput')[form.querySelectorAll('.pointInput').length - 1]
 
-                    if (element.checkValidity() && element.value !== '') {
-                            if (gradeInput.value !== '') {
-                                    if (lastPointInput === element) {
-                                            addGradeInput(element.parentElement.parentElement)
-                                    }
-                            }
+            if (element.checkValidity() && element.value !== '') {
+                if (gradeInput.value !== '') {
+                    if (lastPointInput === element) {
+                        addGradeInput(element.parentElement.parentElement)
                     }
-                    showCalculationsGradeInputs(element.parentElement.parentElement)
-                    showCalculationsGradePoints()
-                    removeEmptyGradeInput()
-            })
+                }
+            }
+            showCalculationsGradeInputs(element.parentElement.parentElement)
+            showCalculationsGradePoints()
+            removeEmptyGradeInput()
+        })
 
-            reportValidityBlur(element)
-            enterToNextInput(element)
+        reportValidityBlur(element)
+        enterToNextInput(element)
     }
 
     //Add events to already existing inputs
     for (let index = 0; index < form.querySelectorAll('.gradeInput').length; index++) {
-            const element = form.querySelectorAll('.gradeInput')[index];
-            handleGradeInput(element)
+        const element = form.querySelectorAll('.gradeInput')[index];
+        handleGradeInput(element)
     }
 
     for (let index = 0; index < form.querySelectorAll('.pointInput').length; index++) {
-            const element = form.querySelectorAll('.pointInput')[index];
-            handlePointInput(element)
+        const element = form.querySelectorAll('.pointInput')[index];
+        handlePointInput(element)
     }
 }
 

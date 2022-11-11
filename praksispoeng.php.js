@@ -3,6 +3,12 @@
  * @author Ole Brede, Terje Rudi.
  */
  async function startPraksispoengKalkulator(){
+    document.currentScript.insertAdjacentHTML('afterend', `
+    <details class="Praksispoeng">
+        <summary>Praksispoeng&shy;kalkulator</summary>
+	</details>
+    `)
+    document.querySelector('.Praksispoeng').appendChild(document.currentScript)
     document.querySelector('.Praksispoeng').querySelector('summary').insertAdjacentHTML('afterend', `
     <style>
         .Praksispoeng {padding: 1.2rem 2.4rem;border-radius: 1rem;box-shadow: .4rem .4rem 1rem rgba(0,0,0,.3);width: clamp(20rem,100%,36rem);margin-bottom: 2rem;}
@@ -193,24 +199,60 @@
         }
     }
 
+    /**
+         * report the validity of the element on blur
+         * @param {object} element htmldomobject
+         */
+    function reportValidityBlur(element) {
+        element.addEventListener('blur', () => {
+            element.reportValidity()
+        })
+    }
+
+    /**
+     * If enter is pressed then selects next input in form
+     * If shift + enter is pressed then selects previous input in form
+     * @param {object} element htmldomobject
+     */
+    function enterToNextInput(element) {
+        element.addEventListener('keypress', (event) => {
+            if (event.keyCode === 13) {
+                const inputs = Array.from(form.querySelectorAll('INPUT'))
+                const next = event.shiftKey ? -1 : 1
+                const input = inputs[inputs.indexOf(element) + next]
+                if (input) {
+                    input.select()
+                }
+            }
+        })
+    }
+
     function handlePraksisInputRowInputs(input) {
         input.addEventListener('input', () => {
             showCalculationsRow(input.parentElement.parentElement)
         })
+
+        reportValidityBlur(input)
+        enterToNextInput(input)
     }
 
-    const obligatedYears = form.querySelector('.obligatedYears')
-    const minMonths = form.querySelector('.minMonths')
+    {
+        const obligatedYears = form.querySelector('.obligatedYears')
+        const minMonths = form.querySelector('.minMonths')
 
-    obligatedYears.addEventListener('input', () => {
-        if (obligatedYears.checkValidity() && obligatedYears.value !== '') {
-            minMonths.innerHTML = obligatedYears.value * 12
-        } else {
-            minMonths.innerHTML = ''
-        }
+        obligatedYears.addEventListener('input', () => {
+            if (obligatedYears.checkValidity() && obligatedYears.value !== '') {
+                minMonths.innerHTML = obligatedYears.value * 12
+            } else {
+                minMonths.innerHTML = ''
+            }
 
-        showCalculationsOverall()
-    })
+            showCalculationsOverall()
+        })
+
+        reportValidityBlur(obligatedYears)
+        enterToNextInput(obligatedYears)
+    }
 
     //Add events to already existing inputs
     for (let index = 0; index < form.querySelectorAll('.praksisInputRow').length; index++) {

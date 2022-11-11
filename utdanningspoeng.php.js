@@ -3,6 +3,12 @@
  * @author Ole Brede, Terje Rudi.
  */
  async function startUtdanningspoengKalkulator(){
+    document.currentScript.insertAdjacentHTML('afterend', `
+    <details class="Utdanningspoeng">
+        <summary>Utdanningspoeng&shy;kalkulator</summary>
+	</details>
+    `)
+    document.querySelector('.Utdanningspoeng').appendChild(document.currentScript)
     document.querySelector('.Utdanningspoeng').querySelector('summary').insertAdjacentHTML('afterend', `
     <style>
         .Utdanningspoeng {padding: 1.2rem 2.4rem;border-radius: 1rem;box-shadow: .4rem .4rem 1rem rgba(0,0,0,.3);width: clamp(20rem,100%,36rem);margin-bottom: 2rem;}
@@ -23,7 +29,8 @@
         <details><summary>Hjelp</summary>
         <ul>
             <li>Tast inn studie&shy;poeng i feltet.</li>
-            <li>1 utdanningspoeng = 30 studiepoeng.</li>
+            <li>1 utdannings&shy;poeng = 30 studie&shy;poeng.</li>
+            <li>Maks 4 utdannings&shy;poeng blir tildelt.</li>
             <li>Ut&shy;regningen ser du nederst i kalku&shy;latoren.</li>
         </ul>
         </details>
