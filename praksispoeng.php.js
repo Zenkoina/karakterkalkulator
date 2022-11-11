@@ -182,8 +182,8 @@
             const monthsValue = row.querySelector('.monthsValue')
 
             if (monthsValue.innerHTML !== '') {
-                    sumMonthsValue += parseFloat(monthsValue.innerHTML)
-                    sumMonths.innerHTML = parseFloat(sumMonthsValue.toFixed(2))
+                sumMonthsValue += parseFloat(monthsValue.innerHTML)
+                sumMonths.innerHTML = parseFloat(sumMonthsValue.toFixed(2))
             }
         }
 

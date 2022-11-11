@@ -64,12 +64,8 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td>Sum studiepoeng:</td>
+                    <td>Sum:</td>
                     <td class="sumPoints"></td>
-                    <td style="border-bottom: none;"></td>
-                </tr>
-                <tr>
-                    <td colspan="2">Sum tallverdi &times; studiepoeng:</td>
                     <td class="sumNumxPoints"></td>
                 </tr>
             </tfoot>
