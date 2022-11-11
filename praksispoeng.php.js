@@ -102,16 +102,16 @@
         clone = row.cloneNode(true)
 
         for (let index = 0; index < clone.querySelectorAll('INPUT').length; index++) {
-                const input = clone.querySelectorAll('INPUT')[index];
-                input.value = ''
-                handlePraksisInputRowInputs(input)
+            const input = clone.querySelectorAll('INPUT')[index];
+            input.value = ''
+            handlePraksisInputRowInputs(input)
         }
 
         for (let index = 0; index < clone.querySelectorAll('TD').length; index++) {
-                const element = clone.querySelectorAll('TD')[index];
-                if (element.children.length === 0) {
-                        element.innerHTML = ''
-                }
+            const element = clone.querySelectorAll('TD')[index];
+            if (element.children.length === 0) {
+                element.innerHTML = ''
+            }
         }
 
         row.insertAdjacentElement('afterend', clone)
@@ -256,12 +256,9 @@
     }
 
     //Add events to already existing inputs
-    for (let index = 0; index < form.querySelectorAll('.praksisInputRow').length; index++) {
-        const row = form.querySelectorAll('.praksisInputRow')[index];
-        for (let index = 0; index < row.querySelectorAll('input').length; index++) {
-            const input = row.querySelectorAll('input')[index];
-            handlePraksisInputRowInputs(input)
-        }
+    for (let index = 0; index < form.querySelectorAll('.praksisInputRow input').length; index++) {
+        const input = form.querySelectorAll('.praksisInputRow input')[index];
+        handlePraksisInputRowInputs(input)
     }
 }
 

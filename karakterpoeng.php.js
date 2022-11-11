@@ -83,20 +83,15 @@
      * Adds a clone of row below row
      * @param {object} row htmldomobject
      */
-    function addGradeInput(row) {
+    function addGradeInputRow(row) {
+        if (row.parentElement.querySelectorAll('.gradeInputsRow')[row.parentElement.querySelectorAll('.gradeInputsRow').length - 1] !== row) {return}
+
         clone = row.cloneNode(true)
 
         for (let index = 0; index < clone.querySelectorAll('INPUT').length; index++) {
-            const element = clone.querySelectorAll('INPUT')[index];
-            element.value = ''
-
-            if (element.classList.contains('gradeInput')) {
-                handleGradeInput(element)
-            }
-
-            if (element.classList.contains('pointInput')) {
-                handlePointInput(element)
-            }
+            const input = clone.querySelectorAll('INPUT')[index];
+            input.value = ''
+            handleGradeInputsRowInputs(input)
         }
 
         for (let index = 0; index < clone.querySelectorAll('TD').length; index++) {
@@ -115,22 +110,26 @@
      * calculates individual row and shows results
      * @param {object} row htmldomobject
      */
-    function showCalculationsGradeInputs(row) {
+    function showCalculationsRow(row) {
         const gradeInput = row.querySelector('.gradeInput')
         const pointInput = row.querySelector('.pointInput')
         const pointValue = row.querySelector('.pointValue')
 
         if (gradeInput.checkValidity() && pointInput.checkValidity() && gradeInput.value !== '' && pointInput.value !== '') {
             pointValue.innerHTML = pointInput.value * ((gradeInput.value.toUpperCase().charCodeAt(0) / -1) + 70)
+
+            addGradeInputRow(row)
         } else {
             pointValue.innerHTML = ''
         }
+
+        showCalculationsOverall()
     }
 
     /**
      * calculates all rows and shows results
      */
-    function showCalculationsGradePoints() {
+    function showCalculationsOverall() {
         const sumPoints = form.querySelector('.sumPoints')
         const sumNumxPoints = form.querySelector('.sumNumxPoints')
         const gradeAvg = form.querySelector('.gradeAvg')
@@ -216,71 +215,36 @@
     }
 
     /**
-     * Handles all the events for elements with the gradeInput class
+     * Handles all the events for elements with the gradeInputsRow class
      * @param {object} element htmldomobject
      */
-    function handleGradeInput(element) {
-        element.addEventListener('input', () => {
-            const pointInput = element.parentElement.parentElement.querySelector('.pointInput')
-            const lastGradeInput = form.querySelectorAll('.gradeInput')[form.querySelectorAll('.gradeInput').length - 1]
+    function handleGradeInputsRowInputs(input) {
+        input.addEventListener('input', () => {
+            let row = input.parentElement.parentElement
 
-            if (parseInt(element.value) <= 5 || element.value === '0') {
-                element.value = String.fromCharCode((element.value / -1) + 70)
-            }
+            if (input.classList.contains('gradeInput')) {
+                if (parseInt(input.value) <= 5 || input.value === '0') {
+                    input.value = String.fromCharCode((input.value / -1) + 70)
+                }
 
-            if (element.checkValidity() && element.value !== '') {
-                element.value = element.value.toUpperCase()
-                pointInput.select()
-
-                if (pointInput.value !== '') {
-                    if (lastGradeInput === element) {
-                        addGradeInput(element.parentElement.parentElement)
-                    }
+                if (input.checkValidity() && input.value !== '') {
+                    input.value = input.value.toUpperCase()
+                    row.querySelector('.pointInput').select()
                 }
             }
-            showCalculationsGradeInputs(element.parentElement.parentElement)
-            showCalculationsGradePoints()
+
+            showCalculationsRow(row)
             removeEmptyGradeInput()
         })
 
-        reportValidityBlur(element)
-        enterToNextInput(element)
-    }
-
-    /**
-     * Handles all the events for elements with the pointInput class
-     * @param {object} element htmldomobject
-     */
-    function handlePointInput(element) {
-        element.addEventListener('input', () => {
-            const gradeInput = element.parentElement.parentElement.querySelector('.gradeInput')
-            const lastPointInput = form.querySelectorAll('.pointInput')[form.querySelectorAll('.pointInput').length - 1]
-
-            if (element.checkValidity() && element.value !== '') {
-                if (gradeInput.value !== '') {
-                    if (lastPointInput === element) {
-                        addGradeInput(element.parentElement.parentElement)
-                    }
-                }
-            }
-            showCalculationsGradeInputs(element.parentElement.parentElement)
-            showCalculationsGradePoints()
-            removeEmptyGradeInput()
-        })
-
-        reportValidityBlur(element)
-        enterToNextInput(element)
+        reportValidityBlur(input)
+        enterToNextInput(input)
     }
 
     //Add events to already existing inputs
-    for (let index = 0; index < form.querySelectorAll('.gradeInput').length; index++) {
-        const element = form.querySelectorAll('.gradeInput')[index];
-        handleGradeInput(element)
-    }
-
-    for (let index = 0; index < form.querySelectorAll('.pointInput').length; index++) {
-        const element = form.querySelectorAll('.pointInput')[index];
-        handlePointInput(element)
+    for (let index = 0; index < form.querySelectorAll('.gradeInputsRow input').length; index++) {
+        const input = form.querySelectorAll('.gradeInputsRow input')[index];
+        handleGradeInputsRowInputs(input)
     }
 }
 
