@@ -39,9 +39,10 @@
     <div class="descriptionCalculator">
         <details><summary>Hjelp</summary>
         <ul>
-            <li>senere</li>
-            <li>senere</li>
-            <li>senere</li>
+            <li>Tast inn startdato, sluttdato og stillingsprosent i de respektive feltene. Ny rad opprettes automatisk, men bruk <em>tabulator</em> for å gå til neste rad.</li>
+            <li>2 praksispoeng = 12 tellende måneder</li>
+            <li>Maks 6 praksispoeng blir tildelt</li>
+            <li>Utregningen ser du nederst i kalkulatoren.</li>
         </ul>
         </details>
     </div>
