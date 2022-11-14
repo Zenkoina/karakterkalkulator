@@ -154,10 +154,19 @@
         const monthsValue = row.querySelector('.monthsValue')
 
         if (beginDateInput.checkValidity() && endDateInput.checkValidity() && percentInput.checkValidity() && beginDateInput.value !== '' && endDateInput.value !== '' && percentInput.value !== '') {
-            monthsValue.innerHTML = parseFloat((monthDiff(beginDateInput.valueAsDate, endDateInput.valueAsDate) * percentInput.value / 100).toFixed(2))
+            const monthsValueRaw = parseFloat(monthDiff(beginDateInput.valueAsDate, endDateInput.valueAsDate).toFixed(2))
+            const monthsValueAdjusted = parseFloat((monthsValueRaw * percentInput.value / 100).toFixed(2))
+
+            monthsValue.innerHTML = monthsValueAdjusted
 
             if (extraInput.checkValidity() && extraInput.value !== '') {
-                monthsValue.innerHTML = parseFloat((parseFloat(monthsValue.innerHTML) + extraInput.value / 150).toFixed(2))
+                const extraMonths = extraInput.value / 150
+
+                if (extraMonths + monthsValueAdjusted > monthsValueRaw) {
+                    monthsValue.innerHTML = monthsValueRaw
+                } else {
+                    monthsValue.innerHTML = parseFloat((parseFloat(monthsValue.innerHTML) + extraInput.value / 150).toFixed(2))
+                }
             }
 
             monthsValue.innerHTML = parseFloat(monthsValue.innerHTML) > 0 || monthsValue.innerHTML === '0' ? monthsValue.innerHTML : ''
