@@ -58,7 +58,7 @@
             <tbody>
                 <tr class="gradeInputsRow">
                     <td><input type="text" maxlength="1" pattern="[A-Fa-f]{1}" title="Bokstav A-F" class="gradeInput" placeholder="A-F"></td>
-                    <td><input type="number" min="0" class="pointInput" title="Tall" placeholder="Tall"></td>
+                    <td><input type="number" min="0" step="0.1" class="pointInput" title="Tall" placeholder="Tall"></td>
                     <td class="summaryColumn pointValue"></td>
                 </tr>
             </tbody>
@@ -116,7 +116,7 @@
         const pointValue = row.querySelector('.pointValue')
 
         if (gradeInput.checkValidity() && pointInput.checkValidity() && gradeInput.value !== '' && pointInput.value !== '') {
-            pointValue.innerHTML = pointInput.value * ((gradeInput.value.toUpperCase().charCodeAt(0) / -1) + 70)
+            pointValue.innerHTML = parseFloat((pointInput.value * ((gradeInput.value.toUpperCase().charCodeAt(0) / -1) + 70)).toFixed(1))
 
             addGradeInputRow(row)
         } else {
@@ -143,8 +143,8 @@
             const pointValue = row.querySelector('.pointValue')
 
             if (pointInput.value !== '' && pointValue.innerHTML !== '') {
-                sumPointsValue += parseInt(pointInput.value)
-                sumNumxPointsValue += parseInt(pointValue.innerHTML)
+                sumPointsValue += parseFloat(pointInput.value)
+                sumNumxPointsValue += parseFloat(pointValue.innerHTML)
                 sumPoints.innerHTML = sumPointsValue
                 sumNumxPoints.innerHTML = sumNumxPointsValue
             }
@@ -158,6 +158,31 @@
             sumNumxPoints.innerHTML = ''
             gradeAvg.innerHTML = ''
             gradePoints.innerHTML = ''
+        }
+
+        updateCompCalculator()
+    }
+
+    function updateCompCalculator() {
+        const gradePoints = form.querySelector('.gradePoints')
+        const compForm = document.querySelector('.compCalculatorForm')
+
+        if (compForm) {
+            const compGradePoints = compForm.querySelector('.gradePoint')
+
+            if (gradePoints.innerHTML !== compGradePoints.innerHTML) {
+                compGradePoints.innerHTML = gradePoints.innerHTML
+            }
+
+            const compEduPointValue = compForm.querySelector('.eduPoint')
+            const compPraksisPoints = compForm.querySelector('.pracPoint')
+            const compPoint = compForm.querySelector('.compPoint')
+
+            if (compGradePoints.innerHTML !== '' && compEduPointValue.innerHTML !== '' && compPraksisPoints.innerHTML !== '') {
+                compPoint.innerHTML = parseFloat(compGradePoints.querySelector('span').innerHTML) + parseInt(compEduPointValue.innerHTML) + parseInt(compPraksisPoints.querySelector('span').innerHTML)
+            } else if (compPoint.innerHTML !== '') {
+                compPoint.innerHTML = ''
+            }
         }
     }
 

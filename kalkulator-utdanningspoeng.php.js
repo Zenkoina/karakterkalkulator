@@ -60,7 +60,32 @@
         const eduPointValue = form.querySelector('.eduPointValue')
 
         eduPointValue.innerHTML = (eduPointInput.checkValidity() && eduPointInput.value !== '') ? Math.min(Math.floor(eduPointInput.value / 30), 4) : ''
+
+        updateCompCalculator()
     })
+
+    function updateCompCalculator() {
+        const eduPointValue = form.querySelector('.eduPointValue')
+        const compForm = document.querySelector('.compCalculatorForm')
+
+        if (compForm) {
+            const compEduPointValue = compForm.querySelector('.eduPoint')
+
+            if (eduPointValue.innerHTML !== compEduPointValue.innerHTML) {
+                compEduPointValue.innerHTML = eduPointValue.innerHTML
+            }
+
+            const compGradePoints = compForm.querySelector('.gradePoint')
+            const compPraksisPoints = compForm.querySelector('.pracPoint')
+            const compPoint = compForm.querySelector('.compPoint')
+
+            if (compGradePoints.innerHTML !== '' && compEduPointValue.innerHTML !== '' && compPraksisPoints.innerHTML !== '') {
+                compPoint.innerHTML = parseFloat(compGradePoints.querySelector('span').innerHTML) + parseInt(compEduPointValue.innerHTML) + parseInt(compPraksisPoints.querySelector('span').innerHTML)
+            } else if (compPoint.innerHTML !== '') {
+                compPoint.innerHTML = ''
+            }
+        }
+    }
 }
 
 startUtdanningspoengKalkulator()

@@ -40,8 +40,8 @@
         <details><summary>Hjelp</summary>
         <ul>
             <li>Tast inn startdato, sluttdato og stillingsprosent i de respektive feltene. Ny rad opprettes automatisk, men bruk <em>tabulator</em> for å gå til neste rad.</li>
-            <li>2 praksispoeng = 12 tellende måneder</li>
-            <li>Maks 6 praksispoeng blir tildelt</li>
+            <li>2 praksispoeng = 12 tellende måneder.</li>
+            <li>Maks 6 praksispoeng blir tildelt.</li>
             <li>Utregningen ser du nederst i kalkulatoren.</li>
         </ul>
         </details>
@@ -192,18 +192,45 @@
         if (sumMonthsValue !== 0 && sumMonthsValue - monthsSubtract >= 0) {
             countingMonths.innerHTML = '<span>' + parseFloat((sumMonthsValue - monthsSubtract).toFixed(2)) + '</span>';
             praksisPoints.innerHTML = '<span>' + Math.min(parseFloat((Math.floor((sumMonthsValue - monthsSubtract) / 12) * 2).toFixed(2)), 6) + '</span>';
-        } else if (sumMonthsValue === 0) {
-            sumMonths.innerHTML = ''
         } else {
             countingMonths.innerHTML = ''
             praksisPoints.innerHTML = ''
         }
+
+        if (sumMonthsValue === 0) {
+            sumMonths.innerHTML = ''
+        }
+
+        updateCompCalculator()
+    }
+
+    function updateCompCalculator() {
+        const praksisPoints = form.querySelector('.praksisPoints')
+        const compForm = document.querySelector('.compCalculatorForm')
+
+        if (compForm) {
+            const compPraksisPoints = compForm.querySelector('.pracPoint')
+
+            if (praksisPoints.innerHTML !== compPraksisPoints.innerHTML) {
+                compPraksisPoints.innerHTML = praksisPoints.innerHTML
+            }
+
+            const compGradePoints = compForm.querySelector('.gradePoint')
+            const compEduPointValue = compForm.querySelector('.eduPoint')
+            const compPoint = compForm.querySelector('.compPoint')
+
+            if (compGradePoints.innerHTML !== '' && compEduPointValue.innerHTML !== '' && compPraksisPoints.innerHTML !== '') {
+                compPoint.innerHTML = parseFloat(compGradePoints.querySelector('span').innerHTML) + parseInt(compEduPointValue.innerHTML) + parseInt(compPraksisPoints.querySelector('span').innerHTML)
+            } else if (compPoint.innerHTML !== '') {
+                compPoint.innerHTML = ''
+            }
+        }
     }
 
     /**
-         * report the validity of the element on blur
-         * @param {object} element htmldomobject
-         */
+     * report the validity of the element on blur
+     * @param {object} element htmldomobject
+     */
     function reportValidityBlur(element) {
         element.addEventListener('blur', () => {
             element.reportValidity()
