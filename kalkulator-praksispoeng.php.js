@@ -135,12 +135,12 @@
         months -= date1.getMonth()
         months += date2.getMonth()
 
-        let days = Math.abs(date2.getDate() - date1.getDate())
+        if ((date1.getDate() === date2.getDate()) || ((date1.getDate() / monthDayCount(date1) === 1) && (date2.getDate() / monthDayCount(date2) === 1))) {return months}
 
         if (date1.getDate() > date2.getDate()) {
-            months -= days / monthDayCount(date1)
+            months -= (date1.getDate() - date2.getDate()) / 31
         } else {
-            months += days / monthDayCount(date2)
+            months -= ((31 - date2.getDate() + date1.getDate()) / 31) - 1
         }
 
         return months
