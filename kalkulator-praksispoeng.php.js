@@ -145,6 +145,28 @@
 
         return months
     }
+    
+    //Potentional alternative way of calculating fractional months
+    /*
+    function monthDiff(date1, date2) {
+        if (date1 > date2) {return}
+
+        let months = (date2.getFullYear() - date1.getFullYear()) * 12
+        months -= date1.getMonth()
+        months += date2.getMonth()
+
+        if (date1.getDate() === date2.getDate()) {return months}
+
+        if (date1.getDate() > date2.getDate()) {
+            date2.setMonth(date2.getMonth() - 1)
+            months -= (date1.getDate() - date2.getDate()) / monthDayCount(date2)
+        } else {
+            months += (date2.getDate() - date1.getDate()) / monthDayCount(date2)
+        }
+
+        return months
+    }
+    */
 
     function showCalculationsRow(row) {
         const beginDateInput = row.querySelector('.beginDateInput')
