@@ -170,18 +170,20 @@
         if (compForm) {
             const compGradePoints = compForm.querySelector('.gradePoint')
 
-            if (gradePoints.innerHTML !== compGradePoints.innerHTML) {
+            if (gradePoints.innerHTML !== compGradePoints.innerHTML && gradePoints.innerHTML !== '') {
                 compGradePoints.innerHTML = gradePoints.innerHTML
+            } else if (gradePoints.innerHTML === '') {
+                compGradePoints.innerHTML = '<span>0</span>'
             }
 
             const compEduPointValue = compForm.querySelector('.eduPoint')
             const compPraksisPoints = compForm.querySelector('.pracPoint')
             const compPoint = compForm.querySelector('.compPoint')
 
-            if (compGradePoints.innerHTML !== '' && compEduPointValue.innerHTML !== '' && compPraksisPoints.innerHTML !== '') {
+            if (compGradePoints.innerHTML !== '0' || compEduPointValue.innerHTML !== '0' || compPraksisPoints.innerHTML !== '0') {
                 compPoint.innerHTML = parseFloat(compGradePoints.querySelector('span').innerHTML) + parseInt(compEduPointValue.innerHTML) + parseInt(compPraksisPoints.querySelector('span').innerHTML)
-            } else if (compPoint.innerHTML !== '') {
-                compPoint.innerHTML = ''
+            } else if (compPoint.innerHTML !== '0') {
+                compPoint.innerHTML = '0'
             }
         }
     }

@@ -47,19 +47,19 @@
             <tfoot>
                 <tr>
                     <td>Karakterpoeng:</td>
-                    <td class="summaryColumn gradePoint"></td>
+                    <td class="summaryColumn gradePoint"><span>0</span></td>
                 </tr>
                 <tr>
                     <td>Utdanningspoeng:</td>
-                    <td class="summaryColumn eduPoint"></td>
+                    <td class="summaryColumn eduPoint">0</td>
                 </tr>
                 <tr>
                     <td>Praksispoeng:</td>
-                    <td class="summaryColumn pracPoint"></td>
+                    <td class="summaryColumn pracPoint"><span>0</span></td>
                 </tr>
                 <tr>
                     <td>Konkurransepoeng:</td>
-                    <td class="summaryColumn compPoint"></td>
+                    <td class="summaryColumn compPoint">0</td>
                 </tr>
             </tfoot>
         </table>

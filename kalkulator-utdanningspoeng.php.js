@@ -71,18 +71,20 @@
         if (compForm) {
             const compEduPointValue = compForm.querySelector('.eduPoint')
 
-            if (eduPointValue.innerHTML !== compEduPointValue.innerHTML) {
+            if (eduPointValue.innerHTML !== compEduPointValue.innerHTML && eduPointValue.innerHTML !== '') {
                 compEduPointValue.innerHTML = eduPointValue.innerHTML
+            } else if (eduPointValue.innerHTML === '') {
+                compEduPointValue.innerHTML = '0'
             }
 
             const compGradePoints = compForm.querySelector('.gradePoint')
             const compPraksisPoints = compForm.querySelector('.pracPoint')
             const compPoint = compForm.querySelector('.compPoint')
 
-            if (compGradePoints.innerHTML !== '' && compEduPointValue.innerHTML !== '' && compPraksisPoints.innerHTML !== '') {
+            if (compGradePoints.innerHTML !== '0' || compEduPointValue.innerHTML !== '0' || compPraksisPoints.innerHTML !== '0') {
                 compPoint.innerHTML = parseFloat(compGradePoints.querySelector('span').innerHTML) + parseInt(compEduPointValue.innerHTML) + parseInt(compPraksisPoints.querySelector('span').innerHTML)
-            } else if (compPoint.innerHTML !== '') {
-                compPoint.innerHTML = ''
+            } else if (compPoint.innerHTML !== '0') {
+                compPoint.innerHTML = '0'
             }
         }
     }
