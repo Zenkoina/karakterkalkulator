@@ -129,7 +129,7 @@
     }
 
     function monthDiff(date1, date2) {
-        if (date1 > date2) {return}
+        if (date1 > date2) {return 0}
 
         let months = (date2.getFullYear() - date1.getFullYear()) * 12
         months -= date1.getMonth()
