@@ -282,6 +282,7 @@
                 const next = event.shiftKey ? -1 : 1
                 const input = inputs[inputs.indexOf(element) + next]
                 if (input) {
+                    input.focus()
                     input.select()
                 }
             }

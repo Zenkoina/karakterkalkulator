@@ -64,6 +64,10 @@
         updateCompCalculator()
     })
 
+    form.addEventListener('submit', (event) => {
+        event.preventDefault()
+    })
+
     function updateCompCalculator() {
         const eduPointValue = form.querySelector('.eduPointValue')
         const compForm = document.querySelector('.compCalculatorForm')
