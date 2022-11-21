@@ -30,6 +30,7 @@
         .AdditionalPoints {margin-bottom:1.8rem;padding: 1rem;border-radius: 0.8rem;box-shadow: inset .2rem .2rem .5rem rgba(0,0,0,.2);background-color: #f9f9f9;}
         .AdditionalPoints details {padding: .8rem;}
         .AdditionalPoints details summary {color: #777;}
+        .AdditionalPoints details input {background-color: white;}
 
         .utregning {padding-left: 1.2rem;border-left: dotted 1px #ddd;}
         .utregning p {margin: 0 0 .2 0;padding-top: 0;}
@@ -118,25 +119,34 @@
                         </tr>
                     </tbody>
                 </table>
+                <details open class="praksisInputRow">
+                    <summary>Jobb 1</summary>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>Startdato</td>
+                                <td><input type="date" title="Startdato" class="beginDateInput"></td>
+                            </tr>
+                            <tr>
+                                <td>Sluttdato</td>
+                                <td><input type="date" title="Sluttdato" class="endDateInput"></td>
+                            </tr>
+                            <tr>
+                                <td>Stillingsprosent</td>
+                                <td><input type="number" min="0" max="100" class="percentInput" title="Prosent" placeholder="Prosent"></td>
+                            </tr>
+                            <tr>
+                                <td>Ekstravakter</td>
+                                <td><input type="number" min="0" class="extraInput" title="Tall" placeholder="Timer"></td>
+                            </tr>
+                            <tr>
+                                <td>Måneder i 100% stilling</td>
+                                <td class="summaryColumn monthsValue"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </details>
                 <table>
-                    <thead>
-                        <tr class="tableHeader">
-                            <th>Start&shy;dato</th>
-                            <th>Slutt&shy;dato</th>
-                            <th>Stillings&shy;prosent</th>
-                            <th>Ekstra&shy;vakter</th>
-                            <th>Måneder i 100% stilling</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="praksisInputRow">
-                            <td><input type="date" title="Startdato" class="beginDateInput"></td>
-                            <td><input type="date" title="Sluttdato" class="endDateInput"></td>
-                            <td><input type="number" min="0" max="100" class="percentInput" title="Prosent" placeholder="%"></td>
-                            <td><input type="number" min="0" class="extraInput" title="Tall" placeholder="Timer"></td>
-                            <td colspan="2" class="summaryColumn monthsValue"></td>
-                        </tr>
-                    </tbody>
                     <tfoot>
                         <tr>
                             <td colspan="3">Sum måneder i 100% stilling:</td>
@@ -331,6 +341,7 @@
     //Handle practiceCalculator
     {
         const form = document.querySelector('.Praksispoeng')
+        let rowCount = 1
 
         function addPraksisInputRow(row) {
             if (row.parentElement.querySelectorAll('.praksisInputRow')[row.parentElement.querySelectorAll('.praksisInputRow').length - 1] !== row) {return}
@@ -343,12 +354,21 @@
                 handlePraksisInputRowInputs(input)
             }
 
-            for (let index = 0; index < clone.querySelectorAll('TD').length; index++) {
-                const element = clone.querySelectorAll('TD')[index];
-                if (element.children.length === 0) {
-                    element.innerHTML = ''
+            for (let index = 0; index < clone.querySelectorAll('TR').length; index++) {
+                const element = clone.querySelectorAll('TR')[index];
+                if (element.querySelectorAll('TD')[1].children.length === 0) {
+                    element.querySelectorAll('TD')[1].innerHTML = ''
                 }
             }
+
+            if (clone.open) {
+                clone.open = false
+            }
+
+            rowCount++
+            clone.querySelector('summary').innerHTML = `Jobb ${rowCount}`
+
+            handlePraksisInputRowDetails(clone)
 
             row.insertAdjacentElement('afterend', clone)
 
@@ -410,12 +430,14 @@
             const percentInput = row.querySelector('.percentInput')
             const extraInput = row.querySelector('.extraInput')
             const monthsValue = row.querySelector('.monthsValue')
+            const summary = row.querySelector('summary')
 
             if (beginDateInput.checkValidity() && endDateInput.checkValidity() && percentInput.checkValidity() && beginDateInput.value !== '' && endDateInput.value !== '' && percentInput.value !== '') {
                 const monthsValueRaw = parseFloat(monthDiff(beginDateInput.valueAsDate, endDateInput.valueAsDate).toFixed(2))
                 const monthsValueAdjusted = parseFloat((monthsValueRaw * percentInput.value / 100).toFixed(2))
 
                 monthsValue.innerHTML = monthsValueAdjusted
+                summary.innerHTML = `${summary.innerHTML.substring(0, 6)} (${monthsValueRaw} måneder i ${percentInput.value}%)`
 
                 if (extraInput.checkValidity() && extraInput.value !== '') {
                     const extraMonths = extraInput.value / 150
@@ -425,6 +447,8 @@
                     } else {
                         monthsValue.innerHTML = parseFloat((parseFloat(monthsValue.innerHTML) + extraInput.value / 150).toFixed(2))
                     }
+
+                    summary.innerHTML = `${summary.innerHTML.substring(0, summary.innerHTML.length - 1)} + ${extraInput.value} timer)`
                 }
 
                 monthsValue.innerHTML = parseFloat(monthsValue.innerHTML) > 0 || monthsValue.innerHTML === '0' ? monthsValue.innerHTML : ''
@@ -432,6 +456,7 @@
                 addPraksisInputRow(row)
             } else {
                 monthsValue.innerHTML = ''
+                summary.innerHTML = `${summary.innerHTML.substring(0, 6)}`
             }
 
             showCalculationsOverall()
@@ -473,7 +498,7 @@
 
         function handlePraksisInputRowInputs(input) {
             input.addEventListener('input', () => {
-                showCalculationsRow(input.parentElement.parentElement)
+                showCalculationsRow(input.parentElement.parentElement.parentElement.parentElement.parentElement)
             })
 
             reportValidityBlur(input)
@@ -498,10 +523,30 @@
             enterToNextInput(obligatedYears, form)
         }
 
+        function handlePraksisInputRowDetails(details) {
+            details.addEventListener('toggle', () => {
+                if (details.open) {
+                    for (let index = 0; index < form.querySelectorAll('.praksisInputRow').length; index++) {
+                        const otherdetails = form.querySelectorAll('.praksisInputRow')[index];
+                        
+                        if (details !== otherdetails && otherdetails.open) {
+                            otherdetails.open = false
+                        }
+                    }
+                }
+            })
+        }
+
         //Add events to already existing inputs
         for (let index = 0; index < form.querySelectorAll('.praksisInputRow input').length; index++) {
             const input = form.querySelectorAll('.praksisInputRow input')[index];
             handlePraksisInputRowInputs(input)
+        }
+
+        //Add events to already existing details
+        for (let index = 0; index < form.querySelectorAll('.praksisInputRow').length; index++) {
+            const details = form.querySelectorAll('.praksisInputRow')[index];
+            handlePraksisInputRowDetails(details)
         }
     }
 
