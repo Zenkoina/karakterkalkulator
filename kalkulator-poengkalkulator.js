@@ -437,7 +437,7 @@
                 const monthsValueAdjusted = parseFloat((monthsValueRaw * percentInput.value / 100).toFixed(2))
 
                 monthsValue.innerHTML = monthsValueAdjusted
-                summary.innerHTML = `${summary.innerHTML.substring(0, 6)} (${monthsValueRaw} måneder i ${percentInput.value}%)`
+                summary.innerHTML = `${summary.innerHTML.substring(0, 6)} (${monthsValueAdjusted} måneder)`
 
                 if (extraInput.checkValidity() && extraInput.value !== '') {
                     const extraMonths = extraInput.value / 150
@@ -448,7 +448,7 @@
                         monthsValue.innerHTML = parseFloat((parseFloat(monthsValue.innerHTML) + extraInput.value / 150).toFixed(2))
                     }
 
-                    summary.innerHTML = `${summary.innerHTML.substring(0, summary.innerHTML.length - 1)} + ${extraInput.value} timer)`
+                    summary.innerHTML = `${summary.innerHTML.substring(0, 6)} (${monthsValue.innerHTML} måneder)`
                 }
 
                 monthsValue.innerHTML = parseFloat(monthsValue.innerHTML) > 0 || monthsValue.innerHTML === '0' ? monthsValue.innerHTML : ''
