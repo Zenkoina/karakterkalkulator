@@ -4,48 +4,59 @@
  */
  async function startPoengKalkulator(){
     document.currentScript.insertAdjacentHTML('afterend', `
-    <details class="Poengkalkulator">
+    <details class="poengCalculator">
         <summary>Poeng&shy;kalkulator</summary>
 	</details>
     `)
-    document.querySelector('.Poengkalkulator').appendChild(document.currentScript)
-    document.querySelector('.Poengkalkulator').querySelector('summary').insertAdjacentHTML('afterend', `
+    document.querySelector('.poengCalculator').appendChild(document.currentScript)
+    document.querySelector('.poengCalculator').querySelector('summary').insertAdjacentHTML('afterend', `
     <style>
-        .Poengkalkulator {padding: 1.2rem 2.4rem;border-radius: 1rem;box-shadow: .4rem .4rem 1rem rgba(0,0,0,.3);width: clamp(20rem,100%,36rem);margin-bottom: 2rem;}
-        .Poengkalkulator summary {cursor: pointer;font-weight: bold; color: #004357;}
+        .poengCalculator {padding: 1.2rem 2.4rem;border-radius: 1rem;box-shadow: .4rem .4rem 1rem rgba(0,0,0,.3);width: clamp(20rem,100%,36rem);margin-bottom: 2rem;}
+        .poengCalculator summary {cursor: pointer;font-weight: bold; color: #004357;}
+        
         .descriptionCalculator {font-size: .8em;margin: 2rem 0;padding-bottom: 1rem;border-bottom: dotted 1px grey;}
         .descriptionCalculator summary {cursor: pointer;font-weight: bold;}
+        
         .calculatorForm table {margin-bottom: 2rem;}
-        .calculatorForm table th {font-size: .8rem;color: #008aa5;vertical-align: top;padding-left: .2rem;border-left: dotted 1px #ddd;}
-        .calculatorForm table th:first-child {border: none;}
+        .calculatorForm table th {font-size: .8rem;color: #008aa5;vertical-align: bottom;padding-left: .2rem;border-left: dotted 1px #ddd;}
+        .calculatorForm table tbody th {text-align: left;vertical-align: middle;border-left: none;padding-left: none;border-bottom: dotted 1px #ddd;}
+        .calculatorForm table thead th:first-child {border: none;}
         .calculatorForm table th:after {content: ":";}
         .calculatorForm table td {vertical-align: baseline;}
         .calculatorForm table td:last-child {text-align: right;}
         .calculatorForm table tbody tr td {border-bottom: dotted 1px #ddd;}
         .calculatorForm table tbody tr:last-child td {border-bottom: dotted 1px grey;}
         .calculatorForm table tbody tr td input {width: calc(100% - 1.2rem);margin: .3rem 0;text-align: center;font-weight: bold;color: #004357;}
+        .praksisInputRow table tbody tr:last-child td {padding: .8rem 0;min-height: 2rem;vertical-align: middle;text-align: center;}
         .calculatorForm table tfoot tr td {vertical-align: bottom;}
         .calculatorForm table tfoot tr td, .gradeAvg, .gradePoints, .countingMonths, .praksisPoints {border-bottom: dotted 1px grey;padding: .4rem 0;font-style: italic;color: #008aa5;}
-        .Praksispoeng table tbody tr td input {width: calc(100% - 1.2rem);margin: .3rem 0;color: #004357;font-size: small;font-weight: normal;}
-        .AdditionalPoints {margin-bottom:1.8rem;padding: 1rem;border-radius: 0.8rem;box-shadow: inset .2rem .2rem .5rem rgba(0,0,0,.2);background-color: #f9f9f9;}
-        .AdditionalPoints details {padding: .8rem;}
-        .AdditionalPoints details summary {color: #777;}
-        .AdditionalPoints details input {background-color: white;}
-
-        .utregning {padding-left: 1.2rem;border-left: dotted 1px #ddd;}
-        .utregning p {margin: 0 0 .2 0;padding-top: 0;}
-        .gradeAvg span, .gradePoints span {color: black;font-weight: bold;}
         .calculatorForm table tfoot tr:last-child td:last-child {font-weight: bold;font-style: normal;color: black;}
+        
+        .Praksispoeng table tbody tr td input {width: calc(100% - 1.2rem);margin: .3rem 0;color: #004357;font-size: small;font-weight: normal;}
+        
+        .additionalPoints {margin-bottom:1.8rem;padding: 1rem;border-radius: 0.8rem;box-shadow: inset .2rem .2rem .5rem rgba(0,0,0,.2);background-color: #fcfcfc;}
+        .additionalPoints details {padding: .8rem;}
+        .additionalPoints details summary {color: #777;}
+        
+        .endCalculation tbody th {font-size: 1.2rem;padding-right: .8rem;}
+        .endCalculation {padding-left: 1.2rem;border-left: solid 6px #96de99;}
+        .endCalculation p {margin: 0 0 .2 0;padding-top: 0;}
+        
         .sumPoints {text-align: center;}
+        
+        .gradeAvg span, .gradePoints span {color: black;font-weight: bold;}
         .gradeAvg::before {content: "Karaktersnitt: ";}
         .gradeAvg::after {content: " (Sum tallverdi × studiepoeng / sum studiepoeng)";}
         .gradePoints::before {content: "Karakterpoeng: ";}
         .gradePoints::after {content: " (Karaktersnitt × 10)";}
+        
         .countingMonths span, .praksisPoints span {color: black;font-weight: bold;}
         .countingMonths::before {content: "Tellende måneder: ";}
         .countingMonths::after {content: " (Måneder i 100% - måneder som trekkes)";}
+        
         .praksisPoints::before {content: "Praksispoeng: ";}
         .praksisPoints::after {content: " (Tellende måneder / 12 × 2)";}
+        
     </style>
     <div class="descriptionCalculator">
         <details><summary>Hjelp</summary>
@@ -80,11 +91,11 @@
                 </tr>
             </tfoot>
         </table>
-        <section class="utregning">
+        <section class="endCalculation">
             <p class="gradeAvg"></p>
             <p class="gradePoints"></p>
         </section>
-        <details class="AdditionalPoints">
+        <details class="additionalPoints">
             <summary>Tilleggspoeng</summary>
             <details class="Utdanningspoeng">
                 <summary>Utdanningspoeng&shy;kalkulator</summary>
@@ -124,23 +135,23 @@
                     <table>
                         <tbody>
                             <tr>
-                                <td>Startdato</td>
+                                <th>Startdato</th>
                                 <td><input type="date" title="Startdato" class="beginDateInput"></td>
                             </tr>
                             <tr>
-                                <td>Sluttdato</td>
+                                <th>Sluttdato</th>
                                 <td><input type="date" title="Sluttdato" class="endDateInput"></td>
                             </tr>
                             <tr>
-                                <td>Stillingsprosent</td>
+                                <th>Stillingsprosent</th>
                                 <td><input type="number" min="0" max="100" class="percentInput" title="Prosent" placeholder="Prosent"></td>
                             </tr>
                             <tr>
-                                <td>Ekstravakter</td>
+                                <th>Ekstravakter</th>
                                 <td><input type="number" min="0" class="extraInput" title="Tall" placeholder="Timer"></td>
                             </tr>
                             <tr>
-                                <td>Måneder i 100% stilling</td>
+                                <th>Måneder i 100% stilling</th>
                                 <td class="summaryColumn monthsValue"></td>
                             </tr>
                         </tbody>
@@ -154,25 +165,19 @@
                         </tr>
                     </tfoot>
                 </table>
-                <section class="utregning">
+                <section class="endCalculation">
                     <p class="countingMonths"></p>
                     <p class="praksisPoints"></p>
                 </section>
             </details>
 	    </details>
-        <table class="compCalculatorTable">
-            <thead>
-                <tr class="tableHeader">
-                    <th>Poeng</th>
-                    <th>Verdi</th>
-                </tr>
-            </thead>
-            <tfoot>
+        <table class="compCalculatorTable endCalculation">
+            <tbody>
                 <tr>
-                    <td>Konkurransepoeng:</td>
+                    <th>Konkurransepoeng</th>
                     <td class="summaryColumn compPoint">0</td>
                 </tr>
-            </tfoot>
+            </tbody>
         </table>
     </form>
     `)
@@ -356,8 +361,8 @@
 
             for (let index = 0; index < clone.querySelectorAll('TR').length; index++) {
                 const element = clone.querySelectorAll('TR')[index];
-                if (element.querySelectorAll('TD')[1].children.length === 0) {
-                    element.querySelectorAll('TD')[1].innerHTML = ''
+                if (element.querySelector('TD').children.length === 0) {
+                    element.querySelector('TD').innerHTML = ''
                 }
             }
 
