@@ -11,6 +11,8 @@ function toggleFullscreen(realm,screen) {
             screen.webkitRequestFullscreen();
         } else if (screen.msRequestFullscreen) { /* IE11 */
             screen.msRequestFullscreen();
+        } else if (document.mozRequestFullScreen) { /* Firefox 9-63 */
+            screen.mozRequestFullScreen();
         }
         
     }else{
@@ -20,8 +22,9 @@ function toggleFullscreen(realm,screen) {
             document.webkitExitFullscreen();
         } else if (document.msExitFullscreen) { /* IE11 */
             document.msExitFullscreen();
+        } else if (document.mozCancelFullScreen) { /* Firefox 9-63 */
+            document.mozCancelFullScreen();
         }
-        
     }
 }
 
@@ -48,6 +51,7 @@ function toggleFullscreen(realm,screen) {
         :fullscreen {overflow-y: scroll;}
         :-webkit-full-screen {overflow-y: scroll;}
         :-ms-fullscreen {overflow-y: scroll;}
+        :-moz-full-screen {overflow-y: scroll;}
 
         
         .descriptionCalculator {font-size: .8em;margin: 2rem auto !important;padding-bottom: 1rem;border-bottom: dotted 1px grey;}
@@ -220,7 +224,7 @@ function toggleFullscreen(realm,screen) {
     function handleFullscreenchange() {
         const realm = document.querySelector('.poengCalculator').querySelector('.menuBtn')
     
-        if (document.fullscreenElement || document.msFullscreenElement || document.webkitfullscreenElement || document.webkitIsFullScreen) {
+        if (document.fullscreenElement || document.msFullscreenElement || document.webkitfullscreenElement || document.webkitIsFullScreen || document.mozFullScreenElement) {
             realm.innerHTML = notFullScreenHTML;
             realm.parentNode.parentNode.setAttribute('open','open');
         } else {
@@ -239,6 +243,10 @@ function toggleFullscreen(realm,screen) {
     document.querySelector('.poengCalculator').addEventListener("msfullscreenchange", () => {
         handleFullscreenchange()
     })
+
+    document.querySelector('.poengCalculator').addEventListener("mozfullscreenchange", () => {
+        handleFullscreenchange()
+    });
 
     //Handles gradeCalculator
     {
