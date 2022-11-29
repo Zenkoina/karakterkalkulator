@@ -408,7 +408,7 @@ function toggleFullscreen(realm,screen) {
                 const row = clone.querySelectorAll('TR')[index];
 
                 for (let index = 0; index < row.querySelectorAll('TD').length; index++) {
-                    const cell = clone.querySelectorAll('TD')[index];
+                    const cell = row.querySelectorAll('TD')[index];
     
                     if (cell.classList.contains('summaryColumn')) {
                         cell.innerHTML = ''
