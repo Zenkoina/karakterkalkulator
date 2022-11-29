@@ -218,7 +218,7 @@ function toggleFullscreen(realm,screen) {
     `)
 
     //Handles changing of fullscreen
-    function handleFullscreenchange() {
+    document.querySelector('.poengCalculator').addEventListener('fullscreenchange', () => {
         const realm = document.querySelector('.poengCalculator').querySelector('.menuBtn')
     
         if (document.fullscreenElement) {
@@ -227,19 +227,28 @@ function toggleFullscreen(realm,screen) {
         } else {
             realm.innerHTML = fullScreenHTML;
         }
-    }
-    document.querySelector('.poengCalculator').addEventListener('fullscreenchange', () => {
-        handleFullscreenchange()
     })
-
     
     document.querySelector('.poengCalculator').addEventListener("webkitfullscreenchange", () => {
-        handleFullscreenchange()
+        const realm = document.querySelector('.poengCalculator').querySelector('.menuBtn')
+    
+        if (document.webkitfullscreenElement) {
+            realm.innerHTML = notFullScreenHTML;
+            realm.parentNode.parentNode.setAttribute('open','open');
+        } else {
+            realm.innerHTML = fullScreenHTML;
+        }
     })
     
-
     document.querySelector('.poengCalculator').addEventListener("msfullscreenchange", () => {
-        handleFullscreenchange()
+        const realm = document.querySelector('.poengCalculator').querySelector('.menuBtn')
+    
+        if (document.msFullscreenElement) {
+            realm.innerHTML = notFullScreenHTML;
+            realm.parentNode.parentNode.setAttribute('open','open');
+        } else {
+            realm.innerHTML = fullScreenHTML;
+        }
     })
 
     //Handles gradeCalculator
