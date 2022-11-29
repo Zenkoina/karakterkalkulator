@@ -48,7 +48,7 @@ function toggleFullscreen(realm,screen) {
         :fullscreen {overflow-y: scroll;}
 
         
-        .descriptionCalculator {font-size: .8em;margin: 2rem 0 !important;padding-bottom: 1rem;border-bottom: dotted 1px grey;}
+        .descriptionCalculator {font-size: .8em;margin: 2rem auto !important;padding-bottom: 1rem;border-bottom: dotted 1px grey;}
         .descriptionCalculator summary {cursor: pointer;font-weight: bold;}
         
         .calculatorForm table {margin-bottom: 2rem;}
