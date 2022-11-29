@@ -217,38 +217,27 @@ function toggleFullscreen(realm,screen) {
     </form>
     `)
 
-    //Handles changing of fullscreen
-    document.querySelector('.poengCalculator').addEventListener('fullscreenchange', () => {
+    function handleFullscreenchange() {
         const realm = document.querySelector('.poengCalculator').querySelector('.menuBtn')
     
-        if (document.fullscreenElement) {
+        if (document.fullscreenElement || document.msFullscreenElement || document.webkitfullscreenElement || document.webkitIsFullScreen) {
             realm.innerHTML = notFullScreenHTML;
             realm.parentNode.parentNode.setAttribute('open','open');
         } else {
             realm.innerHTML = fullScreenHTML;
         }
+    }
+    //Handles changing of fullscreen
+    document.querySelector('.poengCalculator').addEventListener('fullscreenchange', () => {
+        handleFullscreenchange()
     })
     
     document.querySelector('.poengCalculator').addEventListener("webkitfullscreenchange", () => {
-        const realm = document.querySelector('.poengCalculator').querySelector('.menuBtn')
-    
-        if (document.webkitfullscreenElement) {
-            realm.innerHTML = notFullScreenHTML;
-            realm.parentNode.parentNode.setAttribute('open','open');
-        } else {
-            realm.innerHTML = fullScreenHTML;
-        }
+        handleFullscreenchange()
     })
     
     document.querySelector('.poengCalculator').addEventListener("msfullscreenchange", () => {
-        const realm = document.querySelector('.poengCalculator').querySelector('.menuBtn')
-    
-        if (document.msFullscreenElement) {
-            realm.innerHTML = notFullScreenHTML;
-            realm.parentNode.parentNode.setAttribute('open','open');
-        } else {
-            realm.innerHTML = fullScreenHTML;
-        }
+        handleFullscreenchange()
     })
 
     //Handles gradeCalculator
