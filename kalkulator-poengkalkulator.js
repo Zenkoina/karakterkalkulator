@@ -1,11 +1,40 @@
 /**
+ * When attached to an eventListener of an element, opens or closes element in full screen.
+ */
+const fullScreenHTML = '<img src="https://v.hvl.no/grafikk/svg/expand.svg" style="width: 1rem;height: auto" alt="Ikon for ekspansjon av skjerm">';
+const notFullScreenHTML = '<big style="font-size: 1.4rem;">&times;</big>';
+function toggleFullscreen(realm,screen) {
+    if (realm.innerHTML == fullScreenHTML){
+        if (screen.requestFullscreen) {
+            screen.requestFullscreen();
+        } else if (screen.webkitRequestFullscreen) { /* Safari */
+            screen.webkitRequestFullscreen();
+        } else if (screen.msRequestFullscreen) { /* IE11 */
+            screen.msRequestFullscreen();
+        }
+        
+    }else{
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) { /* Safari */
+            document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) { /* IE11 */
+            document.msExitFullscreen();
+        }
+        
+    }
+}
+
+/**
  * Draws out HTML framework and adds functionality to it for a visual and interactive calculator tool.
  * @author Ole Brede, Terje Rudi.
  */
  async function startPoengKalkulator(){
+
+    
     document.currentScript.insertAdjacentHTML('afterend', `
-    <details class="poengCalculator">
-        <summary>Poeng&shy;kalkulator</summary>
+    <details id="poengKalkulator" class="poengCalculator">
+        <summary>Poeng&shy;kalkulator<button class="menuBtn" title="Fullskjerm av/på" onclick="toggleFullscreen(this,document.getElementById('poengKalkulator'));">${fullScreenHTML}</button></summary>
 	</details>
     `)
     document.querySelector('.poengCalculator').appendChild(document.currentScript)
@@ -13,8 +42,13 @@
     <style>
         .poengCalculator {padding: 1.2rem 2.4rem;border-radius: 1rem;box-shadow: .4rem .4rem 1rem rgba(0,0,0,.3);width: clamp(20rem,100%,36rem);margin-bottom: 2rem;}
         .poengCalculator summary {cursor: pointer;font-weight: bold; color: #004357;}
+        .poengCalculator summary .menuBtn {cursor: pointer;float: right;}
+        .poengCalculator::backdrop {background-color: white;}
+        .poengCalculator>* {max-width: 36rem !important; margin: 0 auto !important}
+        :fullscreen {overflow-y: scroll;}
+
         
-        .descriptionCalculator {font-size: .8em;margin: 2rem 0;padding-bottom: 1rem;border-bottom: dotted 1px grey;}
+        .descriptionCalculator {font-size: .8em;margin: 2rem 0 !important;padding-bottom: 1rem;border-bottom: dotted 1px grey;}
         .descriptionCalculator summary {cursor: pointer;font-weight: bold;}
         
         .calculatorForm table {margin-bottom: 2rem;}
@@ -56,7 +90,6 @@
         
         .praksisPoints::before {content: "Praksispoeng: ";}
         .praksisPoints::after {content: " (Tellende måneder / 12 × 2)";}
-        
     </style>
     <div class="descriptionCalculator">
         <details><summary>Hjelp</summary>
@@ -181,6 +214,18 @@
         </table>
     </form>
     `)
+
+    //Handles changing of fullscreen
+    document.querySelector('.poengCalculator').addEventListener('fullscreenchange', () => {
+        const realm = document.querySelector('.poengCalculator').querySelector('.menuBtn')
+    
+        if (document.fullscreenElement) {
+            realm.innerHTML = notFullScreenHTML;
+            realm.parentNode.parentNode.setAttribute('open','open');
+        } else {
+            realm.innerHTML = fullScreenHTML;
+        }
+    })
 
     //Handles gradeCalculator
     {
@@ -360,9 +405,14 @@
             }
 
             for (let index = 0; index < clone.querySelectorAll('TR').length; index++) {
-                const element = clone.querySelectorAll('TR')[index];
-                if (element.querySelector('TD').children.length === 0) {
-                    element.querySelector('TD').innerHTML = ''
+                const row = clone.querySelectorAll('TR')[index];
+
+                for (let index = 0; index < row.querySelectorAll('TD').length; index++) {
+                    const cell = clone.querySelectorAll('TD')[index];
+    
+                    if (cell.classList.contains('summaryColumn')) {
+                        cell.innerHTML = ''
+                    }
                 }
             }
 
