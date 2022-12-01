@@ -223,6 +223,8 @@ function toggleFullscreen(realm,screen) {
 
     //Handles changing of fullscreen
     if (document.fullscreenEnabled || document.msFullscreenEnabled || document.webkitFullscreenEnabled || document.mozFullScreenEnabled) {
+        if (document.webkitFullScreenKeyboardInputAllowed !== undefined && document.webkitFullScreenKeyboardInputAllowed === false) {return}
+
         function handleFullscreenchange() {
             const realm = document.querySelector('.poengCalculator').querySelector('.menuBtn')
         
