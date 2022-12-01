@@ -37,7 +37,7 @@ function toggleFullscreen(realm,screen) {
     
     document.currentScript.insertAdjacentHTML('afterend', `
     <details id="poengKalkulator" class="poengCalculator">
-        <summary>Poeng&shy;kalkulator<button class="menuBtn" title="Fullskjerm av/på" onclick="toggleFullscreen(this,document.getElementById('poengKalkulator'));">${fullScreenHTML}</button></summary>
+        <summary>Poeng&shy;kalkulator</summary>
 	</details>
     `)
     document.querySelector('.poengCalculator').appendChild(document.currentScript)
@@ -221,32 +221,39 @@ function toggleFullscreen(realm,screen) {
     </form>
     `)
 
-    function handleFullscreenchange() {
-        const realm = document.querySelector('.poengCalculator').querySelector('.menuBtn')
-    
-        if (document.fullscreenElement || document.msFullscreenElement || document.webkitfullscreenElement || document.webkitIsFullScreen || document.mozFullScreenElement) {
-            realm.innerHTML = notFullScreenHTML;
-            realm.parentNode.parentNode.setAttribute('open','open');
-        } else {
-            realm.innerHTML = fullScreenHTML;
-        }
-    }
     //Handles changing of fullscreen
-    document.querySelector('.poengCalculator').addEventListener('fullscreenchange', () => {
-        handleFullscreenchange()
-    })
+    if (document.fullscreenEnabled || document.msFullscreenEnabled || document.webkitFullscreenEnabled || document.mozFullScreenEnabled) {
+        function handleFullscreenchange() {
+            const realm = document.querySelector('.poengCalculator').querySelector('.menuBtn')
+        
+            if (document.fullscreenElement || document.msFullscreenElement || document.webkitFullscreenElement || document.webkitIsFullScreen || document.mozFullScreenElement) {
+                realm.innerHTML = notFullScreenHTML;
+                realm.parentNode.parentNode.setAttribute('open','open');
+            } else {
+                realm.innerHTML = fullScreenHTML;
+            }
+        }
+        
+        document.querySelector('.poengCalculator').addEventListener('fullscreenchange', () => {
+            handleFullscreenchange()
+        })
+        
+        document.querySelector('.poengCalculator').addEventListener("webkitfullscreenchange", () => {
+            handleFullscreenchange()
+        })
+        
+        document.querySelector('.poengCalculator').addEventListener("msfullscreenchange", () => {
+            handleFullscreenchange()
+        })
     
-    document.querySelector('.poengCalculator').addEventListener("webkitfullscreenchange", () => {
-        handleFullscreenchange()
-    })
-    
-    document.querySelector('.poengCalculator').addEventListener("msfullscreenchange", () => {
-        handleFullscreenchange()
-    })
+        document.querySelector('.poengCalculator').addEventListener("mozfullscreenchange", () => {
+            handleFullscreenchange()
+        });
 
-    document.querySelector('.poengCalculator').addEventListener("mozfullscreenchange", () => {
-        handleFullscreenchange()
-    });
+        document.querySelector('.poengCalculator').querySelector('summary').insertAdjacentHTML('afterbegin', `
+        <button class="menuBtn" title="Fullskjerm av/på" onclick="toggleFullscreen(this,document.getElementById('poengKalkulator'));">${fullScreenHTML}</button>
+        `)
+    }
 
     //Handles gradeCalculator
     {
