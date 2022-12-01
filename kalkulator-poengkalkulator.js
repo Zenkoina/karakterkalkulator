@@ -250,7 +250,7 @@ function toggleFullscreen(realm,screen) {
             handleFullscreenchange()
         });
 
-        document.querySelector('.poengCalculator').querySelector('summary').insertAdjacentHTML('afterbegin', `
+        document.querySelector('.poengCalculator').querySelector('summary').insertAdjacentHTML('beforeend', `
         <button class="menuBtn" title="Fullskjerm av/på" onclick="toggleFullscreen(this,document.getElementById('poengKalkulator'));">${fullScreenHTML}</button>
         `)
     }
