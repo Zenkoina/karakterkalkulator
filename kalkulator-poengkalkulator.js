@@ -222,9 +222,7 @@ function toggleFullscreen(realm,screen) {
     `)
 
     //Handles changing of fullscreen
-    if (document.fullscreenEnabled || document.msFullscreenEnabled || document.webkitFullscreenEnabled || document.mozFullScreenEnabled) {
-        if (document.webkitFullScreenKeyboardInputAllowed !== undefined && document.webkitFullScreenKeyboardInputAllowed === false) {return}
-
+    if ((document.fullscreenEnabled || document.msFullscreenEnabled || document.webkitFullscreenEnabled || document.mozFullScreenEnabled) && (document.webkitFullScreenKeyboardInputAllowed === undefined || document.webkitFullScreenKeyboardInputAllowed === true)) {
         function handleFullscreenchange() {
             const realm = document.querySelector('.poengCalculator').querySelector('.menuBtn')
         
