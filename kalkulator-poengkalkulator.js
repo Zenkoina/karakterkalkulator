@@ -47,6 +47,8 @@ function toggleFullscreen(realm,screen) {
         .poengCalculator summary {cursor: pointer;font-weight: bold; color: #004357;}
         .poengCalculator summary .menuBtn {cursor: pointer;float: right;}
         .poengCalculator::backdrop {background-color: white;}
+        .poengCalculator::-webkit-backdrop {background-color: white;}
+        .poengCalculator::-ms-backdrop {background-color: white;}
         .poengCalculator>* {max-width: 36rem !important; margin: 0 auto !important}
         :fullscreen {overflow-y: scroll;}
         :-webkit-full-screen {overflow-y: scroll;}
