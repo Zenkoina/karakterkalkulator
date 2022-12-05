@@ -352,17 +352,26 @@ function toggleFullscreen(realm,screen) {
             const activeElementClass = document.activeElement.classList.contains('gradeInput') ? 'gradeInput' : document.activeElement.classList.contains('pointInput') ? 'pointInput' : undefined
     
             for (let index = form.querySelectorAll('.gradeInputsRow').length - 2; index >= 0; index--) {
-                const row = form.querySelectorAll('.gradeInputsRow')[index];
+                const row = form.querySelectorAll('.gradeInputsRow')[index]
                 const gradeInput = row.querySelector('.gradeInput')
                 const pointInput = row.querySelector('.pointInput')
+
+                const lastRow = form.querySelectorAll('.gradeInputsRow')[form.querySelectorAll('.gradeInputsRow').length - 1]
+                const lastGradeInput = lastRow.querySelector('.gradeInput')
+                const lastPointInput = lastRow.querySelector('.pointInput')
+
+                if (lastGradeInput.value !== '' || lastPointInput.value !== '') {return}
     
                 if (gradeInput.value === '' && pointInput.value === '') {
                     if (document.activeElement.parentElement.parentElement === row) {
-                        form.querySelectorAll('.gradeInputsRow')[form.querySelectorAll('gradeInputsRow').length - 1].querySelector(`.${activeElementClass}`)[0].select()
+                        lastRow.querySelector(`.${activeElementClass}`).select()
                     }
                     row.remove()
                 } else if (gradeInput.value === '' || pointInput.value === '') {
-                    form.querySelectorAll('.gradeInputsRow')[form.querySelectorAll('.gradeInputsRow').length - 1].remove()
+                    if (document.activeElement.parentElement.parentElement === lastRow) {
+                        row.querySelector(`.${activeElementClass}`).select()
+                    }
+                    lastRow.remove()
                     return
                 } else {
                     return
@@ -663,7 +672,6 @@ function toggleFullscreen(realm,screen) {
         })
     }
 
-    //FIX
     function updateCompCalculator() {
         const compTable = document.querySelector('.compCalculatorTable')
 
