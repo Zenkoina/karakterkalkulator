@@ -73,8 +73,8 @@ function toggleFullscreen(realm,screen) {
         .calculatorForm table tbody tr td input {width: calc(100% - 1.2rem);margin: .3rem 0;text-align: center;font-weight: bold;color: #004357;}
         .praksisInputRow table tbody tr:last-child td {padding: .8rem 0;min-height: 2rem;vertical-align: middle;text-align: center;}
         .calculatorForm table tfoot tr td {vertical-align: bottom;}
-        .calculatorForm table tfoot tr td, .gradeAvg {border-bottom: dotted 1px grey;padding: .4rem 0;font-style: italic;color: #008aa5;}
-        .calculatorForm table tfoot tr:last-child td:last-child {font-weight: bold;font-style: normal;color: black;}
+        .calculatorForm table tfoot tr td, .gradeAvg {border-bottom: dotted 1px grey;padding: .4rem 0;font-style: italic;color: #008aa5 !important;}
+        .calculatorForm table tfoot tr:last-child td:last-child {font-weight: bold;font-style: normal;color: black !important;}
         
         .Praksispoeng table tbody tr td input {width: calc(100% - 1.2rem);margin: .3rem 0;color: #004357;font-size: small;font-weight: normal;}
         
