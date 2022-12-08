@@ -37,11 +37,14 @@ function toggleFullscreen(realm,screen) {
     
     document.currentScript.insertAdjacentHTML('afterend', `
     <details id="poengKalkulator" class="poengCalculator">
-        <summary>Poeng&shy;kalkulator</summary>
+        <summary>Poeng&shy;kalkulator for master- og videre&shy;utdanning</summary>
 	</details>
     `)
-    document.querySelector('.poengCalculator').appendChild(document.currentScript)
-    document.querySelector('.poengCalculator').querySelector('summary').insertAdjacentHTML('afterend', `
+
+    const pointCalculator = document.querySelector('#poengKalkulator')
+
+    pointCalculator.appendChild(document.currentScript)
+    pointCalculator.querySelector('summary').insertAdjacentHTML('afterend', `
     <style>
         .poengCalculator {padding: 1.2rem 2.4rem;border-radius: 1rem;box-shadow: .4rem .4rem 1rem rgba(0,0,0,.3);width: clamp(20rem,100%,36rem);margin-bottom: 2rem;}
         .poengCalculator summary {cursor: pointer;font-weight: bold; color: #004357;}
@@ -55,9 +58,8 @@ function toggleFullscreen(realm,screen) {
         :-ms-fullscreen {overflow-y: scroll;}
         :-moz-full-screen {overflow-y: scroll;}
 
-        
-        .descriptionCalculator {font-size: .8em;margin: 2rem auto !important;padding-bottom: 1rem;border-bottom: dotted 1px grey;}
-        .descriptionCalculator summary {cursor: pointer;font-weight: bold;}
+        .description {font-size: .8em; margin: 1rem auto}
+        .description p {margin: 0 auto;}
         
         .calculatorForm table {margin-bottom: 2rem;}
         .calculatorForm table th {font-size: .8rem;color: #008aa5;vertical-align: bottom;padding-left: .2rem;border-left: dotted 1px #ddd;}
@@ -67,11 +69,11 @@ function toggleFullscreen(realm,screen) {
         .calculatorForm table td {vertical-align: baseline;}
         .calculatorForm table td:last-child {text-align: right;}
         .calculatorForm table tbody tr td {border-bottom: dotted 1px #ddd;}
-        .calculatorForm table tbody tr:last-child td {border-bottom: dotted 1px grey;}
+        .calculatorForm table tbody tr:last-child td, .calculatorForm table tbody tr:last-child th {border-bottom: dotted 1px grey;}
         .calculatorForm table tbody tr td input {width: calc(100% - 1.2rem);margin: .3rem 0;text-align: center;font-weight: bold;color: #004357;}
         .praksisInputRow table tbody tr:last-child td {padding: .8rem 0;min-height: 2rem;vertical-align: middle;text-align: center;}
         .calculatorForm table tfoot tr td {vertical-align: bottom;}
-        .calculatorForm table tfoot tr td, .gradeAvg, .gradePoints, .countingMonths, .praksisPoints {border-bottom: dotted 1px grey;padding: .4rem 0;font-style: italic;color: #008aa5;}
+        .calculatorForm table tfoot tr td, .gradeAvg {border-bottom: dotted 1px grey;padding: .4rem 0;font-style: italic;color: #008aa5;}
         .calculatorForm table tfoot tr:last-child td:last-child {font-weight: bold;font-style: normal;color: black;}
         
         .Praksispoeng table tbody tr td input {width: calc(100% - 1.2rem);margin: .3rem 0;color: #004357;font-size: small;font-weight: normal;}
@@ -86,93 +88,75 @@ function toggleFullscreen(realm,screen) {
         
         .sumPoints {text-align: center;}
         
-        .gradeAvg span, .gradePoints span {color: black;font-weight: bold;}
-        .gradeAvg::before {content: "Karaktersnitt: ";}
-        .gradeAvg::after {content: " (Sum tallverdi × studiepoeng / sum studiepoeng)";}
-        .gradePoints::before {content: "Karakterpoeng: ";}
-        .gradePoints::after {content: " (Karaktersnitt × 10)";}
-        
-        .countingMonths span, .praksisPoints span {color: black;font-weight: bold;}
-        .countingMonths::before {content: "Tellende måneder: ";}
-        .countingMonths::after {content: " (Måneder i 100% - måneder som trekkes)";}
-        
-        .praksisPoints::before {content: "Praksispoeng: ";}
-        .praksisPoints::after {content: " (Tellende måneder / 12 × 2)";}
+        .gradeAvg output {color: black;font-weight: bold;}
     </style>
-    <div class="descriptionCalculator">
-        <details><summary>Hjelp</summary>
-        <ul>
-            <li>Tast inn bokstavkarakter og studiepoeng i de respektive feltene. Ny rad opprettes automatisk, men bruk <em>tabulator</em> for å gå til neste rad.</li>
-            <li>Bokstavkaraktene har verdi henholdsvis <em>5 – 0</em> for bokstavene <em>A – F</em>.</li>
-            <li>Utregningen ser du nederst i kalkulatoren.</li>
-        </ul>
-        </details>
-    </div>
     <form class="calculatorForm">
         <table class="gradeCalculatorTable">
             <thead>
                 <tr class="tableHeader">
                     <th>Bokstav&shy;karakter</th>
                     <th>Studie&shy;poeng</th>
-                    <th>Karakters tall&shy;verdi<br>&times; studie&shy;poeng</th>
+                    <th>Tall&shy;verdi<br>&times; studie&shy;poeng</th>
                 </tr>
             </thead>
             <tbody>
                 <tr class="gradeInputsRow">
                     <td><input type="text" maxlength="1" pattern="[A-Fa-f]{1}" title="Bokstav A-F" class="gradeInput" placeholder="A-F"></td>
                     <td><input type="number" min="0" step="0.1" class="pointInput" title="Tall" placeholder="Tall"></td>
-                    <td class="summaryColumn pointValue"></td>
+                    <td class="summaryColumn"><output class="pointValue"></output></td>
                 </tr>
             </tbody>
             <tfoot>
                 <tr>
                     <td>Sum:</td>
-                    <td class="sumPoints"></td>
-                    <td class="sumNumxPoints"></td>
+                    <td class="sumPoints"><output></output></td>
+                    <td class="sumNumxPoints"><output></output></td>
                 </tr>
             </tfoot>
         </table>
         <section class="endCalculation">
-            <p class="gradeAvg"></p>
-            <p class="gradePoints"></p>
+            <p class="gradeAvg">Vektet snitt: <output></output></p>
         </section>
         <details class="additionalPoints">
             <summary>Tilleggspoeng</summary>
             <details class="Utdanningspoeng">
-                <summary>Utdanningspoeng&shy;kalkulator</summary>
-                    <table class="eduCalculatorTable">
-                        <thead>
-                            <tr class="tableHeader">
-                                <th>Studie&shy;poeng</th>
-                                <th>Utdannings&shy;poeng</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="eduPointInputRow">
-                                <td><input type="number" min="0" class="eduPointInput" title="Tall" placeholder="Tall"></td>
-                                <td class="summaryColumn eduPointValue"></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <summary>Utdanningspoeng</summary>
+                <div class="description">
+                    <p>Du får bare poeng for studiepoeng du har i tillegg til graden din.</p>
+                </div>
+                <table class="eduCalculatorTable">
+                    <thead>
+                        <tr class="tableHeader">
+                            <th>Studie&shy;poeng</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="eduPointInputRow">
+                            <td><input type="number" min="0" class="eduPointInput" title="Tall" placeholder="Tall"></td>
+                        </tr>
+                    </tbody>
+                </table>
             </details>
             <details class="Praksispoeng">
-                <summary>Praksispoeng&shy;kalkulator</summary>
+                <summary>Praksispoeng</summary>
+                <div class="description">
+                    <p>Du får bare poeng på utdanninger som har krav om praksis.</p>
+                    <p>Du får ikke poeng for praksis som dekker kravet.</p>
+                </div>
                 <table>
                     <thead>
                         <tr class="tableHeader">
-                            <th>År med praksis det er krav om</th>
-                            <th>Måneder som trekkes fra</th>
+                            <th>Hvor mange år med praksis inngår i opptakskravet?</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr class="obligationInputRow">
                             <td><input type="number" min="0" class="obligatedYears" title="Tall" placeholder="År"></td>
-                            <td class="summaryColumn minMonths"></td>
                         </tr>
                     </tbody>
                 </table>
                 <details open class="praksisInputRow">
-                    <summary>Jobb 1</summary>
+                    <summary>Stillingsforhold 1</summary>
                     <table>
                         <tbody>
                             <tr>
@@ -191,32 +175,36 @@ function toggleFullscreen(realm,screen) {
                                 <th>Ekstravakter</th>
                                 <td><input type="number" min="0" class="extraInput" title="Tall" placeholder="Timer"></td>
                             </tr>
-                            <tr>
-                                <th>Måneder i 100% stilling</th>
-                                <td class="summaryColumn monthsValue"></td>
-                            </tr>
                         </tbody>
                     </table>
                 </details>
                 <table>
                     <tfoot>
                         <tr>
-                            <td colspan="3">Sum måneder i 100% stilling:</td>
-                            <td colspan="2" class="summaryColumn sumMonths"></td>
+                            <td>Sum mnd. i 100% stilling:&nbsp;</td>
+                            <td class="summaryColumn"><output class="sumMonths"></output></td>
                         </tr>
                     </tfoot>
                 </table>
-                <section class="endCalculation">
-                    <p class="countingMonths"></p>
-                    <p class="praksisPoints"></p>
-                </section>
             </details>
 	    </details>
         <table class="compCalculatorTable endCalculation">
             <tbody>
                 <tr>
+                    <th>Karakterpoeng</th>
+                    <td class="summaryColumn"><output class="gradePoints">0</output></td>
+                </tr>
+                <tr>
+                    <th>Utdanningspoeng</th>
+                    <td class="summaryColumn"><output class="eduPointValue">0</output></td>
+                </tr>
+                <tr>
+                    <th>Praksispoeng</th>
+                    <td class="summaryColumn"><output class="praksisPoints">0</output></td>
+                </tr>
+                <tr>
                     <th>Konkurransepoeng</th>
-                    <td class="summaryColumn compPoint">0</td>
+                    <td class="summaryColumn"><output class="compPoint">0</output></td>
                 </tr>
             </tbody>
         </table>
@@ -226,7 +214,7 @@ function toggleFullscreen(realm,screen) {
     //Handles changing of fullscreen
     if ((document.fullscreenEnabled || document.msFullscreenEnabled || document.webkitFullscreenEnabled || document.mozFullScreenEnabled) && (document.webkitFullScreenKeyboardInputAllowed === undefined || document.webkitFullScreenKeyboardInputAllowed === true)) {
         function handleFullscreenchange() {
-            const realm = document.querySelector('.poengCalculator').querySelector('.menuBtn')
+            const realm = pointCalculator.querySelector('.menuBtn')
         
             if (document.fullscreenElement || document.msFullscreenElement || document.webkitFullscreenElement || document.webkitIsFullScreen || document.mozFullScreenElement) {
                 realm.innerHTML = notFullScreenHTML;
@@ -236,23 +224,23 @@ function toggleFullscreen(realm,screen) {
             }
         }
         
-        document.querySelector('.poengCalculator').addEventListener('fullscreenchange', () => {
+        pointCalculator.addEventListener('fullscreenchange', () => {
             handleFullscreenchange()
         })
         
-        document.querySelector('.poengCalculator').addEventListener("webkitfullscreenchange", () => {
+        pointCalculator.addEventListener("webkitfullscreenchange", () => {
             handleFullscreenchange()
         })
         
-        document.querySelector('.poengCalculator').addEventListener("msfullscreenchange", () => {
+        pointCalculator.addEventListener("msfullscreenchange", () => {
             handleFullscreenchange()
         })
     
-        document.querySelector('.poengCalculator').addEventListener("mozfullscreenchange", () => {
+        pointCalculator.addEventListener("mozfullscreenchange", () => {
             handleFullscreenchange()
         });
 
-        document.querySelector('.poengCalculator').querySelector('summary').insertAdjacentHTML('beforeend', `
+        pointCalculator.querySelector('summary').insertAdjacentHTML('beforeend', `
         <button class="menuBtn" title="Fullskjerm av/på" onclick="toggleFullscreen(this,document.getElementById('poengKalkulator'));">${fullScreenHTML}</button>
         `)
     }
@@ -276,11 +264,9 @@ function toggleFullscreen(realm,screen) {
                 handleGradeInputsRowInputs(input)
             }
     
-            for (let index = 0; index < clone.querySelectorAll('TD').length; index++) {
-                const element = clone.querySelectorAll('TD')[index];
-                if (element.children.length === 0) {
-                    element.innerHTML = ''
-                }
+            for (let index = 0; index < clone.querySelectorAll('OUTPUT').length; index++) {
+                const element = clone.querySelectorAll('OUTPUT')[index];
+                element.innerHTML = ''
             }
     
             row.insertAdjacentElement('afterend', clone)
@@ -312,10 +298,10 @@ function toggleFullscreen(realm,screen) {
          * calculates all rows and shows results
          */
         function showCalculationsOverall() {
-            const sumPoints = form.querySelector('.sumPoints')
-            const sumNumxPoints = form.querySelector('.sumNumxPoints')
-            const gradeAvg = form.parentElement.querySelector('.gradeAvg')
-            const gradePoints = form.parentElement.querySelector('.gradePoints')
+            const sumPoints = form.querySelector('.sumPoints > output')
+            const sumNumxPoints = form.querySelector('.sumNumxPoints > output')
+            const gradeAvg = form.parentElement.querySelector('.gradeAvg > output')
+            const gradePoints = pointCalculator.querySelector('.gradePoints')
             let sumPointsValue = 0
             let sumNumxPointsValue = 0
     
@@ -333,13 +319,13 @@ function toggleFullscreen(realm,screen) {
             }
     
             if (sumPointsValue !== 0 || sumNumxPointsValue !== 0) {
-                gradeAvg.innerHTML = '<span>' + parseFloat((sumNumxPointsValue / sumPointsValue).toFixed(3)) + '</span>';
-                gradePoints.innerHTML = '<span>' + parseFloat((sumNumxPointsValue / sumPointsValue * 10).toFixed(2)) + '</span>';
+                gradeAvg.innerHTML = parseFloat((sumNumxPointsValue / sumPointsValue).toFixed(3));
+                gradePoints.innerHTML = parseFloat((sumNumxPointsValue / sumPointsValue * 10).toFixed(2));
             } else {
                 sumPoints.innerHTML = ''
                 sumNumxPoints.innerHTML = ''
                 gradeAvg.innerHTML = ''
-                gradePoints.innerHTML = ''
+                gradePoints.innerHTML = '0'
             }
     
             updateCompCalculator()
@@ -388,7 +374,7 @@ function toggleFullscreen(realm,screen) {
                 let row = input.parentElement.parentElement
     
                 if (input.classList.contains('gradeInput')) {
-                    if (parseInt(input.value) <= 5 || input.value === '0') {
+                    if (parseInt(input.value) <= 5 && parseInt(input.value) >= 0) {
                         input.value = String.fromCharCode((input.value / -1) + 70)
                     }
     
@@ -419,9 +405,9 @@ function toggleFullscreen(realm,screen) {
         const eduPointInput = form.querySelector('.eduPointInput')
 
         eduPointInput.addEventListener('input', () => {
-            const eduPointValue = form.querySelector('.eduPointValue')
+            const eduPointValue = pointCalculator.querySelector('.eduPointValue')
 
-            eduPointValue.innerHTML = (eduPointInput.checkValidity() && eduPointInput.value !== '') ? Math.min(Math.floor(eduPointInput.value / 30), 4) : ''
+            eduPointValue.innerHTML = (eduPointInput.checkValidity() && eduPointInput.value !== '0') ? Math.min(Math.floor(eduPointInput.value / 30), 4) : '0'
 
             updateCompCalculator()
         })
@@ -443,24 +429,12 @@ function toggleFullscreen(realm,screen) {
                 handlePraksisInputRowInputs(input)
             }
 
-            for (let index = 0; index < clone.querySelectorAll('TR').length; index++) {
-                const row = clone.querySelectorAll('TR')[index];
-
-                for (let index = 0; index < row.querySelectorAll('TD').length; index++) {
-                    const cell = row.querySelectorAll('TD')[index];
-    
-                    if (cell.classList.contains('summaryColumn')) {
-                        cell.innerHTML = ''
-                    }
-                }
-            }
-
             if (clone.open) {
                 clone.open = false
             }
 
             rowCount++
-            clone.querySelector('summary').innerHTML = `Jobb ${rowCount}`
+            clone.querySelector('summary').innerHTML = `Stillingsforhold ${rowCount}`
 
             handlePraksisInputRowDetails(clone)
 
@@ -518,69 +492,57 @@ function toggleFullscreen(realm,screen) {
         }
         */
 
-        function showCalculationsRow(row) {
+        function CalculateRow(row) {
             const beginDateInput = row.querySelector('.beginDateInput')
             const endDateInput = row.querySelector('.endDateInput')
             const percentInput = row.querySelector('.percentInput')
             const extraInput = row.querySelector('.extraInput')
-            const monthsValue = row.querySelector('.monthsValue')
-            const summary = row.querySelector('summary')
+            let monthsValue = 0
 
             if (beginDateInput.checkValidity() && endDateInput.checkValidity() && percentInput.checkValidity() && beginDateInput.value !== '' && endDateInput.value !== '' && percentInput.value !== '') {
-                const monthsValueRaw = parseFloat(monthDiff(beginDateInput.valueAsDate, endDateInput.valueAsDate).toFixed(2))
-                const monthsValueAdjusted = parseFloat((monthsValueRaw * percentInput.value / 100).toFixed(2))
+                const monthsValueRaw = monthDiff(beginDateInput.valueAsDate, endDateInput.valueAsDate)
+                const monthsValueAdjusted = monthsValueRaw * percentInput.value / 100
 
-                monthsValue.innerHTML = monthsValueAdjusted
-                summary.innerHTML = `${summary.innerHTML.substring(0, 6)} (${monthsValueAdjusted} måneder)`
+                monthsValue = monthsValueAdjusted
 
                 if (extraInput.checkValidity() && extraInput.value !== '') {
                     const extraMonths = extraInput.value / 150
 
                     if (extraMonths + monthsValueAdjusted > monthsValueRaw) {
-                        monthsValue.innerHTML = monthsValueRaw
+                        monthsValue = monthsValueRaw
                     } else {
-                        monthsValue.innerHTML = parseFloat((parseFloat(monthsValue.innerHTML) + extraInput.value / 150).toFixed(2))
+                        monthsValue = monthsValue + extraInput.value / 150
                     }
 
-                    summary.innerHTML = `${summary.innerHTML.substring(0, 6)} (${monthsValue.innerHTML} måneder)`
                 }
 
-                monthsValue.innerHTML = parseFloat(monthsValue.innerHTML) > 0 || monthsValue.innerHTML === '0' ? monthsValue.innerHTML : ''
-
                 addPraksisInputRow(row)
-            } else {
-                monthsValue.innerHTML = ''
-                summary.innerHTML = `${summary.innerHTML.substring(0, 6)}`
             }
 
-            showCalculationsOverall()
+            return monthsValue
         }
 
         function showCalculationsOverall() {
             const sumMonths = form.querySelector('.sumMonths')
-            const minMonths = form.querySelector('.minMonths')
-            const countingMonths = form.querySelector('.countingMonths')
-            const praksisPoints = form.querySelector('.praksisPoints')
+            const obligatedYears = form.querySelector('.obligatedYears')
+            const praksisPoints = pointCalculator.querySelector('.praksisPoints')
             let sumMonthsValue = 0
 
             for (let index = 0; index < form.querySelectorAll('.praksisInputRow').length; index++) {
                 const row = form.querySelectorAll('.praksisInputRow')[index];
-                const monthsValue = row.querySelector('.monthsValue')
+                const monthsValue = CalculateRow(row)
 
-                if (monthsValue.innerHTML !== '') {
-                    sumMonthsValue += parseFloat(monthsValue.innerHTML)
-                    sumMonths.innerHTML = parseFloat(sumMonthsValue.toFixed(2))
-                }
+                sumMonthsValue += monthsValue
             }
 
-            const monthsSubtract = minMonths.innerHTML !== '' ? minMonths.innerHTML : 0
+            sumMonths.innerHTML = parseFloat(sumMonthsValue.toFixed(2))
+
+            const monthsSubtract = obligatedYears.checkValidity() && obligatedYears.value !== '' ? obligatedYears.value * 12 : 0
 
             if (sumMonthsValue !== 0 && sumMonthsValue - monthsSubtract >= 0) {
-                countingMonths.innerHTML = '<span>' + parseFloat((sumMonthsValue - monthsSubtract).toFixed(2)) + '</span>';
-                praksisPoints.innerHTML = '<span>' + Math.min(parseFloat((Math.floor((sumMonthsValue - monthsSubtract) / 12) * 2).toFixed(2)), 6) + '</span>';
+                praksisPoints.innerHTML = Math.min(parseFloat((Math.floor((sumMonthsValue - monthsSubtract) / 12) * 2).toFixed(2)), 6);
             } else {
-                countingMonths.innerHTML = ''
-                praksisPoints.innerHTML = ''
+                praksisPoints.innerHTML = '0'
             }
 
             if (sumMonthsValue === 0) {
@@ -592,7 +554,7 @@ function toggleFullscreen(realm,screen) {
 
         function handlePraksisInputRowInputs(input) {
             input.addEventListener('input', () => {
-                showCalculationsRow(input.parentElement.parentElement.parentElement.parentElement.parentElement)
+                showCalculationsOverall()
             })
 
             reportValidityBlur(input)
@@ -601,15 +563,8 @@ function toggleFullscreen(realm,screen) {
 
         {
             const obligatedYears = form.querySelector('.obligatedYears')
-            const minMonths = form.querySelector('.minMonths')
 
             obligatedYears.addEventListener('input', () => {
-                if (obligatedYears.checkValidity() && obligatedYears.value !== '') {
-                    minMonths.innerHTML = obligatedYears.value * 12
-                } else {
-                    minMonths.innerHTML = ''
-                }
-
                 showCalculationsOverall()
             })
 
@@ -675,9 +630,9 @@ function toggleFullscreen(realm,screen) {
     function updateCompCalculator() {
         const compTable = document.querySelector('.compCalculatorTable')
 
-        const gradePoints = document.querySelector('.gradePoints').innerHTML == '' ? 0 : parseFloat(document.querySelector('.gradePoints').querySelector('span').innerHTML) 
-        const eduPointValue = document.querySelector('.eduPointValue').innerHTML == '' ? 0 : parseInt(document.querySelector('.eduPointValue').innerHTML) 
-        const praksisPoints = document.querySelector('.praksisPoints').innerHTML == '' ? 0 : parseInt(document.querySelector('.praksisPoints').querySelector('span').innerHTML) 
+        const gradePoints = parseFloat(document.querySelector('.gradePoints').innerHTML) 
+        const eduPointValue = parseInt(document.querySelector('.eduPointValue').innerHTML) 
+        const praksisPoints = parseInt(document.querySelector('.praksisPoints').innerHTML) 
         const compPoint = compTable.querySelector('.compPoint')
 
         compPoint.innerHTML = gradePoints + eduPointValue + praksisPoints
