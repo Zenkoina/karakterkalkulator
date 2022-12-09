@@ -60,6 +60,8 @@ function toggleFullscreen(realm,screen) {
 
         .description {font-size: .8em; margin: 1rem auto}
         .description p {margin: 0 auto;}
+
+        .gradeCalculatorTitle {font-weight: bold;color: #777 !important;margin: 2rem auto .8rem;}
         
         .calculatorForm table {margin-bottom: 2rem;}
         .calculatorForm table th {font-size: .8rem;color: #008aa5;vertical-align: bottom;padding-left: .2rem;border-left: dotted 1px #ddd;}
@@ -91,6 +93,7 @@ function toggleFullscreen(realm,screen) {
         .gradeAvg output {color: black;font-weight: bold;}
     </style>
     <form class="calculatorForm">
+        <p class="gradeCalculatorTitle">Karakterpoeng</p>
         <table class="gradeCalculatorTable">
             <thead>
                 <tr class="tableHeader">
