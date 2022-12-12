@@ -316,8 +316,8 @@ function toggleFullscreen(realm,screen) {
                 if (pointInput.value !== '' && pointValue.innerHTML !== '') {
                     sumPointsValue += parseFloat(pointInput.value)
                     sumNumxPointsValue += parseFloat(pointValue.innerHTML)
-                    sumPoints.innerHTML = sumPointsValue
-                    sumNumxPoints.innerHTML = sumNumxPointsValue
+                    sumPoints.innerHTML = parseFloat(sumPointsValue.toFixed(1))
+                    sumNumxPoints.innerHTML = parseFloat(sumNumxPointsValue.toFixed(1))
                 }
             }
     
