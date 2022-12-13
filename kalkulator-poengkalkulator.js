@@ -249,6 +249,7 @@ function toggleFullscreen(realm,screen) {
     }
 
     //Handles gradeCalculator
+    let gradePointsValue = 0
     {
         const form = document.querySelector('.gradeCalculatorTable')
 
@@ -269,7 +270,7 @@ function toggleFullscreen(realm,screen) {
     
             for (let index = 0; index < clone.querySelectorAll('OUTPUT').length; index++) {
                 const element = clone.querySelectorAll('OUTPUT')[index];
-                element.innerHTML = ''
+                element.value = ''
             }
     
             row.insertAdjacentElement('afterend', clone)
@@ -287,11 +288,11 @@ function toggleFullscreen(realm,screen) {
             const pointValue = row.querySelector('.pointValue')
     
             if (gradeInput.checkValidity() && pointInput.checkValidity() && gradeInput.value !== '' && pointInput.value !== '') {
-                pointValue.innerHTML = parseFloat((pointInput.value * ((gradeInput.value.toUpperCase().charCodeAt(0) / -1) + 70)).toFixed(1))
+                pointValue.value = (pointInput.value * ((gradeInput.value.toUpperCase().charCodeAt(0) / -1) + 70)).toLocaleString('no-NO', {minimumFractionDigits: 0, maximumFractionDigits: 1})
     
                 addGradeInputRow(row)
             } else {
-                pointValue.innerHTML = ''
+                pointValue.value = ''
             }
     
             showCalculationsOverall()
@@ -310,25 +311,28 @@ function toggleFullscreen(realm,screen) {
     
             for (let index = 0; index < form.querySelectorAll('.gradeInputsRow').length; index++) {
                 const row = form.querySelectorAll('.gradeInputsRow')[index];
+                const gradeInput = row.querySelector('.gradeInput')
                 const pointInput = row.querySelector('.pointInput')
                 const pointValue = row.querySelector('.pointValue')
     
-                if (pointInput.value !== '' && pointValue.innerHTML !== '') {
+                if (pointInput.value !== '' && pointValue.value !== '') {
                     sumPointsValue += parseFloat(pointInput.value)
-                    sumNumxPointsValue += parseFloat(pointValue.innerHTML)
-                    sumPoints.innerHTML = parseFloat(sumPointsValue.toFixed(1))
-                    sumNumxPoints.innerHTML = parseFloat(sumNumxPointsValue.toFixed(1))
+                    sumNumxPointsValue += pointInput.value * ((gradeInput.value.toUpperCase().charCodeAt(0) / -1) + 70)
                 }
             }
     
             if (sumPointsValue !== 0 || sumNumxPointsValue !== 0) {
-                gradeAvg.innerHTML = parseFloat((sumNumxPointsValue / sumPointsValue).toFixed(3));
-                gradePoints.innerHTML = parseFloat((sumNumxPointsValue / sumPointsValue * 10).toFixed(2));
+                sumPoints.value = sumPointsValue.toLocaleString('no-NO', {minimumFractionDigits: 0, maximumFractionDigits: 1})
+                sumNumxPoints.value = sumNumxPointsValue.toLocaleString('no-NO', {minimumFractionDigits: 0, maximumFractionDigits: 1})
+                gradeAvg.value = (sumNumxPointsValue / sumPointsValue).toLocaleString('no-NO', {minimumFractionDigits: 0, maximumFractionDigits: 3})
+                gradePointsValue = (sumNumxPointsValue / sumPointsValue * 10)
+                gradePoints.value = gradePointsValue.toLocaleString('no-NO', {minimumFractionDigits: 0, maximumFractionDigits: 2})
             } else {
-                sumPoints.innerHTML = ''
-                sumNumxPoints.innerHTML = ''
-                gradeAvg.innerHTML = ''
-                gradePoints.innerHTML = '0'
+                sumPoints.value = ''
+                sumNumxPoints.value = ''
+                gradeAvg.value = ''
+                gradePointsValue = 0
+                gradePoints.value = '0'
             }
     
             updateCompCalculator()
@@ -410,7 +414,7 @@ function toggleFullscreen(realm,screen) {
         eduPointInput.addEventListener('input', () => {
             const eduPointValue = pointCalculator.querySelector('.eduPointValue')
 
-            eduPointValue.innerHTML = (eduPointInput.checkValidity() && eduPointInput.value !== '0') ? Math.min(Math.floor(eduPointInput.value / 30), 4) : '0'
+            eduPointValue.value = (eduPointInput.checkValidity() && eduPointInput.value !== '0') ? Math.min(Math.floor(eduPointInput.value / 30), 4) : '0'
 
             updateCompCalculator()
         })
@@ -538,18 +542,18 @@ function toggleFullscreen(realm,screen) {
                 sumMonthsValue += monthsValue
             }
 
-            sumMonths.innerHTML = parseFloat(sumMonthsValue.toFixed(2))
+            sumMonths.value = sumMonthsValue.toLocaleString('no-NO', {minimumFractionDigits: 0, maximumFractionDigits: 2})
 
             const monthsSubtract = obligatedYears.checkValidity() && obligatedYears.value !== '' ? obligatedYears.value * 12 : 0
 
-            if (sumMonthsValue !== 0 && sumMonthsValue - monthsSubtract >= 0) {
-                praksisPoints.innerHTML = Math.min(parseFloat((Math.floor((sumMonthsValue - monthsSubtract) / 12) * 2).toFixed(2)), 6);
+            if (sumMonthsValue !== 0 && sumMonthsValue - monthsSubtract > 0) {
+                praksisPoints.value = Math.min((Math.floor((sumMonthsValue - monthsSubtract) / 12) * 2), 6).toLocaleString('no-NO', {minimumFractionDigits: 0, maximumFractionDigits: 0})
             } else {
-                praksisPoints.innerHTML = '0'
+                praksisPoints.value = '0'
             }
 
             if (sumMonthsValue === 0) {
-                sumMonths.innerHTML = ''
+                sumMonths.value = ''
             }
 
             updateCompCalculator()
@@ -633,12 +637,11 @@ function toggleFullscreen(realm,screen) {
     function updateCompCalculator() {
         const compTable = document.querySelector('.compCalculatorTable')
 
-        const gradePoints = parseFloat(document.querySelector('.gradePoints').innerHTML) 
-        const eduPointValue = parseInt(document.querySelector('.eduPointValue').innerHTML) 
-        const praksisPoints = parseInt(document.querySelector('.praksisPoints').innerHTML) 
+        const eduPointValue = parseInt(document.querySelector('.eduPointValue').value) 
+        const praksisPoints = parseInt(document.querySelector('.praksisPoints').value) 
         const compPoint = compTable.querySelector('.compPoint')
 
-        compPoint.innerHTML = gradePoints + eduPointValue + praksisPoints
+        compPoint.value = (gradePointsValue + eduPointValue + praksisPoints).toLocaleString('no-NO', {minimumFractionDigits: 0, maximumFractionDigits: 2})
     }
 }
 
