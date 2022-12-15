@@ -61,32 +61,33 @@ function toggleFullscreen(realm,screen) {
         .description {font-size: .8em; margin: 1rem auto}
         .description p {margin: 0 auto;}
 
-        .gradeCalculatorTitle {font-weight: bold;color: #777 !important;margin: 2rem auto .8rem;}
+        .gradeCalculatorTitle {font-weight: bold;color: #006c73 !important;margin: 2rem auto .8rem;}
         
         .calculatorForm table {margin-bottom: 2rem;}
         .calculatorForm table th {font-size: .8rem;color: #008aa5;vertical-align: bottom;padding-left: .2rem;border-left: dotted 1px #ddd;}
         .calculatorForm table tbody th {text-align: left;vertical-align: middle;border-left: none;padding-left: none;border-bottom: dotted 1px #ddd;}
-        .calculatorForm table thead th:first-child {border: none;}
+        .calculatorForm table thead th {text-align: left;padding: 0 0 .1rem .6rem;}
+        .calculatorForm table thead th:first-child {border: none;padding-left: .1rem;}
         .calculatorForm table th:after {content: ":";}
         .calculatorForm table td {vertical-align: baseline;}
         .calculatorForm table td:last-child {text-align: right;}
         .calculatorForm table tbody tr td {border-bottom: dotted 1px #ddd;}
         .calculatorForm table tbody tr:last-child td, .calculatorForm table tbody tr:last-child th {border-bottom: dotted 1px grey;}
-        .calculatorForm table tbody tr td input {width: calc(100% - 1.2rem);margin: .3rem 0;text-align: center;font-weight: bold;color: #004357;}
+        .calculatorForm table tbody tr td input {width: calc(100% - 1.2rem);margin: .3rem 0;text-align: center;color: #004357;}
         .praksisInputRow table tbody tr:last-child td {padding: .8rem 0;min-height: 2rem;vertical-align: middle;text-align: center;}
         .calculatorForm table tfoot tr td {vertical-align: bottom;}
-        .calculatorForm table tfoot tr td, .gradeAvg {border-bottom: dotted 1px grey;padding: .4rem 0;font-style: italic;color: #008aa5 !important;}
+        .calculatorForm table tfoot tr td, .gradeAvg {border-bottom: dotted 1px grey;padding: .4rem 0;color: #2b2f2f !important;}
         .calculatorForm table tfoot tr:last-child td:last-child {font-weight: bold;font-style: normal;color: black !important;}
         
         .Praksispoeng table tbody tr td input {width: calc(100% - 1.2rem);margin: .3rem 0;color: #004357;font-size: small;font-weight: normal;}
         
         .additionalPoints {margin-bottom:1.8rem;padding: 1rem;border-radius: 0.8rem;box-shadow: inset .2rem .2rem .5rem rgba(0,0,0,.2);background-color: #fcfcfc;}
         .additionalPoints details {padding: .8rem;}
-        .additionalPoints details summary {color: #777;}
+        .additionalPoints details summary {color: #006c73;}
         
-        .endCalculation tbody th {font-size: 1.2rem;padding-right: .8rem;}
-        .endCalculation {padding-left: 1.2rem;border-left: solid 6px #96de99;}
-        .endCalculation p {margin: 0 0 .2 0;padding-top: 0;}
+        .endCalculation tbody th {font-size: 1.2rem;font-weight: normal;color: #2b2f2f;padding-right: .8rem;}
+        .endCalculation tbody tr:last-child th {font-weight: bold;color: #004357;}
+        .endCalculation p {padding-top: 0;}
         
         .sumPoints {text-align: center;}
         
@@ -176,7 +177,7 @@ function toggleFullscreen(realm,screen) {
                             </tr>
                             <tr>
                                 <th>Ekstravakter</th>
-                                <td><input type="number" min="0" class="extraInput" title="Tall" placeholder="Timer"></td>
+                                <td><input type="number" min="0" class="extraInput" title="Timer" placeholder="Timer"></td>
                             </tr>
                         </tbody>
                     </table>
